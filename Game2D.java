@@ -35,7 +35,7 @@ public class Game2D extends Base2DFramework implements Loop {
         g.setColor(Color.WHITE);
         g.drawRect((this.getWidth() / 2) - 50, (this.getHeight() / 2) - 50, 100, 100);
         
-        g.drawString(String.valueOf(loop.getFps()), 0, 0);
+        g.drawString(String.valueOf(loop.getFps()), 10, 10);
     }
 
 }
