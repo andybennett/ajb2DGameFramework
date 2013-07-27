@@ -59,7 +59,6 @@ public class Base2DFramework extends JPanel implements MouseListener, MouseMotio
             coordTransform.translate(dx, dy);
             dragStartScreen = dragEndScreen;
             dragEndScreen = null;
-            
             this.repaint();
         }
         catch (NoninvertibleTransformException ex) {
@@ -85,7 +84,8 @@ public class Base2DFramework extends JPanel implements MouseListener, MouseMotio
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {        
+    public void mouseReleased(MouseEvent e) {
+    	moveCamera(e);
     }
 
     @Override
