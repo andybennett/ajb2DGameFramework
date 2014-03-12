@@ -19,6 +19,7 @@ public class Base2DFramework extends JPanel implements MouseListener, MouseMotio
 
     public Color background = Color.decode("#1E1E1E");
 
+    protected boolean allowDrag = true;
     protected boolean init = true;
     protected Point dragStartScreen;
     protected Point dragEndScreen;
@@ -51,15 +52,17 @@ public class Base2DFramework extends JPanel implements MouseListener, MouseMotio
 
     private void moveCamera(MouseEvent e) {
         try {
-            dragEndScreen = e.getPoint();
-            Point2D.Double dragStart = transformPoint(dragStartScreen);
-            Point2D.Double dragEnd = transformPoint(dragEndScreen);
-            double dx = dragEnd.getX() - dragStart.getX();
-            double dy = dragEnd.getY() - dragStart.getY();
-            coordTransform.translate(dx, dy);
-            dragStartScreen = dragEndScreen;
-            dragEndScreen = null;
-            this.repaint();
+        	if (allowDrag) {
+	            dragEndScreen = e.getPoint();
+	            Point2D.Double dragStart = transformPoint(dragStartScreen);
+	            Point2D.Double dragEnd = transformPoint(dragEndScreen);
+	            double dx = dragEnd.getX() - dragStart.getX();
+	            double dy = dragEnd.getY() - dragStart.getY();
+	            coordTransform.translate(dx, dy);
+	            dragStartScreen = dragEndScreen;
+	            dragEndScreen = null;
+	            this.repaint();
+        	}
         }
         catch (NoninvertibleTransformException ex) {
             ex.printStackTrace();
@@ -79,13 +82,13 @@ public class Base2DFramework extends JPanel implements MouseListener, MouseMotio
 
     @Override
     public void mousePressed(MouseEvent e) {
-        dragStartScreen = e.getPoint();
-        dragEndScreen = null;
+    	dragStartScreen = e.getPoint();
+    	dragEndScreen = null;
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-    	moveCamera(e);
+    	//moveCamera(e);
     }
 
     @Override
@@ -98,7 +101,7 @@ public class Base2DFramework extends JPanel implements MouseListener, MouseMotio
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        moveCamera(e);
+    	moveCamera(e);
     }
 
     @Override
