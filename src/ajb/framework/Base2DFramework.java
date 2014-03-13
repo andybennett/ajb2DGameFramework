@@ -41,6 +41,8 @@ public class Base2DFramework extends JPanel implements MouseListener, MouseMotio
 		Dimension d = getSize();
 		g.fillRect(0, 0, (int) d.getWidth(), (int) d.getHeight());
 
+		drawBeforeTransform(g);
+		
 		if (init) {
 			init = false;
 			coordTransform = g.getTransform();
@@ -49,6 +51,10 @@ public class Base2DFramework extends JPanel implements MouseListener, MouseMotio
 		}
 	}
 
+	public void drawBeforeTransform(Graphics2D g) {
+		
+	}
+	
 	public void moveToPoint(Point p) {
 		coordTransform.translate(p.getX(), p.getY());
 		this.repaint();
