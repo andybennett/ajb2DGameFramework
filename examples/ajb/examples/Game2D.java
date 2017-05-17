@@ -23,7 +23,7 @@ public class Game2D extends Base2DFramework implements Loop {
         
     	JFrame frame = new JFrame();
         frame.setTitle("Example");
-        frame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(1024, 768);
         frame.setLocationRelativeTo(null);
         frame.add(this);
