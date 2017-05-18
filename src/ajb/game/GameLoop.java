@@ -7,27 +7,29 @@ public class GameLoop {
     private boolean gameRunning = true;
     private long lastFpsTime;
     private int fps;
-    
+
     private Loop game;
 
-    public GameLoop(Loop game)
-    {
-        this.game = game;
-    }
-    
-    public void go() {
+    public GameLoop(Loop game) {
         
+        this.game = game;
+        
+    }
+
+    public void go() {
+
         long lastLoopTime = System.nanoTime();
 
         final int TARGET_FPS = 60;
 
-        final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;        
-        
+        final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+
         // keep looping round until the game ends
-        while (gameRunning)
-        {
+        while (gameRunning) {
+            
             // work out how long its been since the last update, this
-            // will be used to calculate how far the entities should move this loop
+            // will be used to calculate how far the entities should move this
+            // loop
             long now = System.nanoTime();
 
             long updateLength = now - lastLoopTime;
@@ -40,10 +42,13 @@ public class GameLoop {
 
             fps++;
 
-            // update our FPS counter if a second has passed since we last recorded
+            // update our FPS counter if a second has passed since we last
+            // recorded
             if (lastFpsTime >= 1000000000) {
+                
                 lastFpsTime = 0;
                 fps = 0;
+                
             }
 
             // update the game logic
@@ -58,26 +63,38 @@ public class GameLoop {
             // to this and then factor in the current time to give
             // us our final value to wait for
 
-            // remember this is in ms, whereas our lastLoopTime etc. vars are in ns.
+            // remember this is in ms, whereas our lastLoopTime etc. vars are in
+            // ns.
 
             try {
+                
                 Thread.sleep((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000);
-            }
-            catch (InterruptedException e) {
+                
+            } catch (InterruptedException e) {
+                
                 e.printStackTrace();
+                
             }
-        }        
+            
+        }
+        
     }
 
     public boolean isGameRunning() {
+        
         return gameRunning;
+        
     }
 
     public void setGameRunning(boolean gameRunning) {
+        
         this.gameRunning = gameRunning;
+        
     }
 
     public int getFps() {
+        
         return fps;
+        
     }
 }
