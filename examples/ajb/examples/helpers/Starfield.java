@@ -77,7 +77,7 @@ public class Starfield {
 
         }
 
-        g.setColor(Colours.gray);
+        g.setColor(Color.decode("#242424").darker());
         g.drawRect(x, y, width * 2, height * 2);
 
     }
