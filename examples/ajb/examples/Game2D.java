@@ -4,7 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 
+import ajb.examples.helpers.Colours;
+import ajb.examples.helpers.LookAndFeelUtils;
 import ajb.framework.Base2DFramework;
 import ajb.game.GameLoop;
 import ajb.interfaces.Loop;
@@ -15,6 +20,7 @@ public class Game2D extends Base2DFramework implements Loop {
     @SuppressWarnings("unused")
     public static void main(String[] args) {
         
+    	LookAndFeelUtils.setNimbusLookAndfeel();
         Game2D app = new Game2D();
         
     }

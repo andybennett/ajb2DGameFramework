@@ -2,9 +2,9 @@ package ajb.examples;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
 
 import javax.swing.JFrame;
 
@@ -80,7 +80,7 @@ public class StarfieldExample extends Base2DFramework implements Loop {
 
             try {
 
-                moveToPoint(transformPoint(new Point(0 + this.getWidth() / 2, 0 + this.getHeight() / 2)));
+                moveToPoint(transformPoint(new Point2D.Double(0 + this.getWidth() / 2, 0 + this.getHeight() / 2)));
 
             } catch (NoninvertibleTransformException e1) {
 

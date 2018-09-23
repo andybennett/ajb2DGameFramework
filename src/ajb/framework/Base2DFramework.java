@@ -4,13 +4,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
@@ -18,14 +21,14 @@ import java.awt.geom.Point2D;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class Base2DFramework extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
+public class Base2DFramework extends JPanel implements MouseListener, MouseMotionListener, KeyListener, ComponentListener{
 
     private Color background = Color.decode("#1E1E1E");
 
     protected boolean allowDrag = true;
     protected boolean init = true;
-    protected Point dragStartScreen;
-    protected Point dragEndScreen;
+    protected Point2D.Double dragStartScreen;
+    protected Point2D.Double dragEndScreen;
     protected AffineTransform coordTransform = new AffineTransform();
 
     public Base2DFramework() {
@@ -79,8 +82,8 @@ public class Base2DFramework extends JPanel implements MouseListener, MouseMotio
     }
 
     public void moveToPoint(Point2D.Double p) {
-
-        coordTransform.translate(p.getX(), p.getY());
+    	
+    	coordTransform.translate(p.getX(), p.getY());
         this.repaint();
 
     }
@@ -91,7 +94,7 @@ public class Base2DFramework extends JPanel implements MouseListener, MouseMotio
 
             if (allowDrag) {
 
-                dragEndScreen = e.getPoint();
+                dragEndScreen = new Point2D.Double(e.getPoint().getX(), e.getPoint().getY());
                 Point2D.Double dragStart = transformPoint(dragStartScreen);
                 Point2D.Double dragEnd = transformPoint(dragEndScreen);
                 double dx = dragEnd.getX() - dragStart.getX();
@@ -111,7 +114,7 @@ public class Base2DFramework extends JPanel implements MouseListener, MouseMotio
 
     }
 
-    protected Point2D.Double transformPoint(Point p1) throws NoninvertibleTransformException {
+    protected Point2D.Double transformPoint(Point2D.Double p1) throws NoninvertibleTransformException {
 
         AffineTransform inverse = coordTransform.createInverse();
         Point2D.Double p2 = new Point2D.Double();
@@ -127,7 +130,7 @@ public class Base2DFramework extends JPanel implements MouseListener, MouseMotio
     @Override
     public void mousePressed(MouseEvent e) {
 
-        dragStartScreen = e.getPoint();
+        dragStartScreen = new Point2D.Double(e.getPoint().getX(), e.getPoint().getY());
         dragEndScreen = null;
 
     }
@@ -167,4 +170,29 @@ public class Base2DFramework extends JPanel implements MouseListener, MouseMotio
     @Override
     public void keyTyped(KeyEvent arg0) {
     }
+
+	@Override
+	public void componentHidden(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentShown(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

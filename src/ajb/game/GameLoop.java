@@ -68,7 +68,8 @@ public class GameLoop {
 
             try {
                 
-                Thread.sleep((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000);
+            	long sleepTime = (lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
+                Thread.sleep(sleepTime > 0 ? sleepTime : 0);
                 
             } catch (InterruptedException e) {
                 
