@@ -42,45 +42,6 @@ public class ShipBuilderUtils {
 
 		}
 
-	}
-
-	public static Area generateLevel1Cannon() {
-		
-		Area area = new Area();
-		
-		area.add(new Area(new Rectangle2D.Double(0, 0, 2, 100)));
-		area.add(new Area(new Rectangle2D.Double(2, 1, 2, 100)));
-
-		for (int x = 0; x < RandomInt.anyRandomIntRange(5, 5); x++) {
-
-			addHull(area);
-
-		}
-
-		area.add(mirrorAlongX((int)area.getBounds2D().getMinX(), area));
-		area = translateToTopLeft(area);
-
-		return area;
-
-	}	
-	
-	public static Area generateSmallShip() {
-		
-		Area area = new Area();
-		
-		area.add(new Area(new Rectangle2D.Double(0, 0, 5, 60)));
-
-		for (int x = 0; x < RandomInt.anyRandomIntRange(100, 300); x++) {
-
-			addHull(area);
-
-		}
-
-		area.add(mirrorAlongX((int)area.getBounds2D().getMinX(), area));
-		area = translateToTopLeft(area);
-
-		return area;
-
 	}	
 	
 	public static Area generateShip() {
