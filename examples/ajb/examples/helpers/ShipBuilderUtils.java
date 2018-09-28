@@ -9,8 +9,6 @@ import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 import ajb.random.RandomInt;
 
@@ -87,33 +85,14 @@ public class ShipBuilderUtils {
 	
 	public static Area generateShip() {
 		
-		List<Area> areas = new ArrayList<Area>();
+		Area area = generateHull();
 		
-		for (int i = 0; i < 10; i++) {
-			
-			Area area = new Area();
-
-			addStartingPoints(area);
-
-			for (int x = 0; x < RandomInt.anyRandomIntRange(1000, 1000); x++) {
-
-				addHull(area);
-
-			}
-			
-			areas.add(area);
-			
-		}
-		
-		Area area = areas.get(RandomInt.anyRandomIntRange(0, areas.size() - 1));
-		
-		int combineAmount = RandomInt.anyRandomIntRange(0, 6);
+		int combineAmount = RandomInt.anyRandomIntRange(0, 5);
 		
 		for (int i = 0; i < combineAmount; i++) {
 			
 			Point2D.Double point = findPointWithinArea(area);
-			point.y = area.getBounds2D().getMaxY();
-			Area areaToAdd = areas.get(RandomInt.anyRandomIntRange(0, areas.size() - 1));
+			Area areaToAdd = generateHull();
 			areaToAdd = translateToPoint(areaToAdd, point);
 			area.add(areaToAdd);
 			
@@ -128,22 +107,38 @@ public class ShipBuilderUtils {
 
 	public static void addStartingPoints(Area area) {
 
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 2; i++) {
 			
-			area.add(new Area(new Rectangle2D.Double(RandomInt.anyRandomIntRange(0, 80),
+			area.add(new Area(new Rectangle2D.Double(RandomInt.anyRandomIntRange(0, 10),
 					RandomInt.anyRandomIntRange(0, 100), RandomInt.anyRandomIntRange(1, 10), RandomInt.anyRandomIntRange(10, 100))));
 			
 		}
 
+	}
+	
+	public static Area generateHull() {
+		
+		Area area = new Area();
+
+		addStartingPoints(area);
+
+		for (int x = 0; x < RandomInt.anyRandomIntRange(50, 1000); x++) {
+
+			addHull(area);
+
+		}
+		
+		return area;
+		
 	}
 
 	public static void addHull(Area area) {
 
 		Point2D.Double point = findPointWithinArea(area);
 		
-		area.add(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(-5, 5),
-				point.y + RandomInt.anyRandomIntRange(-5, 5), RandomInt.anyRandomIntRange(1, 10),
-				RandomInt.anyRandomIntRange(1, 40))));
+		area.add(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(-10, 10),
+				point.y + RandomInt.anyRandomIntRange(-10, 10), RandomInt.anyRandomIntRange(1, 10),
+				RandomInt.anyRandomIntRange(1, 30))));
 
 	}
 
