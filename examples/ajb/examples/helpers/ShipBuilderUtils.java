@@ -1,5 +1,6 @@
 package ajb.examples.helpers;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
@@ -16,7 +17,7 @@ public class ShipBuilderUtils {
 
 	public static void main(String[] args) {
 
-		ShipBuilderUtils.generateShips(100);
+		ShipBuilderUtils.generateShips(10);
 
 	}
 
@@ -24,18 +25,18 @@ public class ShipBuilderUtils {
 
 		for (int i = 0; i < amount; i++) {
 
-			Area area = generateShip();
+			Area ship = generateShip();
 
 			GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
 					.getDefaultConfiguration();
-			BufferedImage img = gc.createCompatibleImage((int) area.getBounds2D().getMaxX(),
-					(int) area.getBounds2D().getMaxY(), BufferedImage.TYPE_INT_ARGB);
+			BufferedImage img = gc.createCompatibleImage((int) ship.getBounds2D().getMaxX(),
+					(int) ship.getBounds2D().getMaxY(), BufferedImage.TYPE_INT_ARGB);
 
 			Graphics2D gr = (Graphics2D) img.getGraphics();
 
 			gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			gr.setColor(Colours.gray);
-			gr.fill(area);
+			gr.setColor(Color.decode("#242424").brighter());
+			gr.fill(ship);
 			gr.dispose();
 			
 			ImageUtils.save(img, "png", "Ship" + i);
@@ -54,6 +55,7 @@ public class ShipBuilderUtils {
 			
 			Point2D.Double point = findPointWithinArea(area);
 			Area areaToAdd = generateHull();
+			areaToAdd.add(mirrorAlongX(RandomInt.anyRandomIntRange((int)areaToAdd.getBounds2D().getMinX(), (int)areaToAdd.getBounds2D().getMinX()), areaToAdd));
 			areaToAdd = translateToPoint(areaToAdd, point);
 			area.add(areaToAdd);
 			
@@ -68,10 +70,10 @@ public class ShipBuilderUtils {
 
 	public static void addStartingPoints(Area area) {
 
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 5; i++) {
 			
 			area.add(new Area(new Rectangle2D.Double(RandomInt.anyRandomIntRange(0, 10),
-					RandomInt.anyRandomIntRange(0, 100), RandomInt.anyRandomIntRange(1, 10), RandomInt.anyRandomIntRange(10, 100))));
+					RandomInt.anyRandomIntRange(0, 50), RandomInt.anyRandomIntRange(1, 10), RandomInt.anyRandomIntRange(10, 100))));
 			
 		}
 
@@ -83,7 +85,7 @@ public class ShipBuilderUtils {
 
 		addStartingPoints(area);
 
-		for (int x = 0; x < RandomInt.anyRandomIntRange(50, 1000); x++) {
+		for (int x = 0; x < RandomInt.anyRandomIntRange(50, 3000); x++) {
 
 			addHull(area);
 
@@ -99,7 +101,7 @@ public class ShipBuilderUtils {
 		
 		area.add(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(-10, 10),
 				point.y + RandomInt.anyRandomIntRange(-10, 10), RandomInt.anyRandomIntRange(1, 10),
-				RandomInt.anyRandomIntRange(1, 30))));
+				RandomInt.anyRandomIntRange(1, 50))));
 
 	}
 
