@@ -102,7 +102,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 			gr.setColor(Color.BLACK);
 			gr.setStroke(new BasicStroke(1));
 			gr.draw(ship);
-			gr.setColor(Color.decode("#242424").brighter().brighter());
+			gr.setColor(Color.decode("#242424").brighter());
 			gr.fill(ship);
 
 		}
