@@ -70,7 +70,7 @@ public class ShipBuilderUtils {
 
 	public static void addStartingPoints(Area area) {
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 2; i++) {
 			
 			area.add(new Area(new Rectangle2D.Double(RandomInt.anyRandomIntRange(0, 10),
 					RandomInt.anyRandomIntRange(0, 50), RandomInt.anyRandomIntRange(1, 10), RandomInt.anyRandomIntRange(10, 100))));
@@ -85,7 +85,7 @@ public class ShipBuilderUtils {
 
 		addStartingPoints(area);
 
-		for (int x = 0; x < RandomInt.anyRandomIntRange(50, 3000); x++) {
+		for (int x = 0; x < RandomInt.anyRandomIntRange(50, 300); x++) {
 
 			addHull(area);
 
