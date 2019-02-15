@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
+import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -25,7 +27,7 @@ public class ShipBuilderUtils {
 
 		for (int i = 0; i < amount; i++) {
 
-			Area ship = generateShip();
+			Area ship = generate();
 
 			GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
 					.getDefaultConfiguration();
@@ -38,70 +40,103 @@ public class ShipBuilderUtils {
 			gr.setColor(Color.decode("#242424").brighter());
 			gr.fill(ship);
 			gr.dispose();
-			
+
 			ImageUtils.save(img, "png", "Ship" + i);
 
 		}
 
-	}	
-	
-	public static Area generateShip() {
-		
-		Area area = generateHull();
-		
-		int combineAmount = RandomInt.anyRandomIntRange(0, 5);
-		
-		for (int i = 0; i < combineAmount; i++) {
-			
-			Point2D.Double point = findPointWithinArea(area);
-			Area areaToAdd = generateHull();
-			areaToAdd.add(mirrorAlongX(RandomInt.anyRandomIntRange((int)areaToAdd.getBounds2D().getMinX(), (int)areaToAdd.getBounds2D().getMinX()), areaToAdd));
-			areaToAdd = translateToPoint(areaToAdd, point);
-			area.add(areaToAdd);
-			
+	}
+
+	public static BufferedImage generateImage() {
+
+		Area ship = generate();
+
+		GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
+				.getDefaultConfiguration();
+		BufferedImage img = gc.createCompatibleImage((int) ship.getBounds2D().getMaxX(),
+				(int) ship.getBounds2D().getMaxY(), BufferedImage.TYPE_INT_ARGB);
+
+		Graphics2D gr = (Graphics2D) img.getGraphics();
+
+		gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		gr.setColor(Color.decode("#242424").brighter());
+		gr.fill(ship);
+		gr.dispose();
+
+		return img;
+
+	}
+
+	public static Area generate() {
+
+		Area area = null;
+
+		int type = RandomInt.anyRandomIntRange(1, 2);
+
+		switch (type) {
+		case 1:
+			area = halfCircle();
+			break;
+		case 2:
+			area = halfTriangle();
+			break;
 		}
 
-		area.add(mirrorAlongX(RandomInt.anyRandomIntRange((int)area.getBounds2D().getMinX(), (int)area.getBounds2D().getCenterX()), area));
+		int count = RandomInt.anyRandomIntRange(20, 100);
+
+		for (int i = 0; i < count; i++) {
+
+			if (RandomInt.anyRandomIntRange(0, 1) == 1) {
+
+				add(area);
+
+			} else {
+
+				subtract(area);
+			}
+
+		}
+
+		// Mirror horizontally
+		area.add(mirrorAlongX((int) area.getBounds2D().getMinX(), area));
 		area = translateToTopLeft(area);
 
 		return area;
 
 	}
 
-	public static void addStartingPoints(Area area) {
+	public static Area halfTriangle() {
 
-		for (int i = 0; i < 2; i++) {
-			
-			area.add(new Area(new Rectangle2D.Double(RandomInt.anyRandomIntRange(0, 10),
-					RandomInt.anyRandomIntRange(0, 50), RandomInt.anyRandomIntRange(1, 10), RandomInt.anyRandomIntRange(10, 100))));
-			
-		}
+		int[] xpoints = new int[] { 0, 20, 0 };
+		int[] ypoints = new int[] { 0, 70, 70 };
+
+		return new Area(new Polygon(xpoints, ypoints, 3));
 
 	}
-	
-	public static Area generateHull() {
-		
-		Area area = new Area();
 
-		addStartingPoints(area);
+	public static Area halfCircle() {
 
-		for (int x = 0; x < RandomInt.anyRandomIntRange(50, 300); x++) {
+		return new Area(new Arc2D.Double(0, 0, 100, 100, 0, 90, Arc2D.PIE));
 
-			addHull(area);
-
-		}
-		
-		return area;
-		
 	}
 
-	public static void addHull(Area area) {
+	public static void add(Area area) {
 
 		Point2D.Double point = findPointWithinArea(area);
-		
-		area.add(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(-10, 10),
-				point.y + RandomInt.anyRandomIntRange(-10, 10), RandomInt.anyRandomIntRange(1, 10),
-				RandomInt.anyRandomIntRange(1, 50))));
+
+		area.add(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(0, 2),
+				point.y + RandomInt.anyRandomIntRange(0, 2), RandomInt.anyRandomIntRange(1, 10),
+				RandomInt.anyRandomIntRange(1, 20))));
+
+	}
+
+	public static void subtract(Area area) {
+
+		Point2D.Double point = findPointWithinArea(area);
+
+		area.subtract(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(0, 2),
+				point.y + RandomInt.anyRandomIntRange(0, 2), RandomInt.anyRandomIntRange(1, 10),
+				RandomInt.anyRandomIntRange(1, 20))));
 
 	}
 
@@ -133,14 +168,14 @@ public class ShipBuilderUtils {
 		return new Area(at.createTransformedShape(area));
 
 	}
-	
+
 	public static Area flipVertically(Area area) {
 
 		AffineTransform at = new AffineTransform();
 		at.scale(1, -1);
 		return new Area(at.createTransformedShape(area));
 
-	}	
+	}
 
 	public static Area translateToTopLeft(Area area) {
 
@@ -149,7 +184,7 @@ public class ShipBuilderUtils {
 		return area.createTransformedArea(at);
 
 	}
-	
+
 	public static Area translateToPoint(Area area, Point2D.Double point) {
 
 		AffineTransform at = new AffineTransform();
