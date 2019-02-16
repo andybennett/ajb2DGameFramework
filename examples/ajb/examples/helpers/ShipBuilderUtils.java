@@ -53,8 +53,8 @@ public class ShipBuilderUtils {
 
 		GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
 				.getDefaultConfiguration();
-		BufferedImage img = gc.createCompatibleImage((int) ship1.getBounds2D().getMaxX(), (int) ship1.getBounds2D().getMaxY(),
-				BufferedImage.TYPE_INT_ARGB);
+		BufferedImage img = gc.createCompatibleImage((int) ship1.getBounds2D().getMaxX(),
+				(int) ship1.getBounds2D().getMaxY(), BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D gr = (Graphics2D) img.getGraphics();
 
@@ -74,15 +74,15 @@ public class ShipBuilderUtils {
 		int type = RandomInt.anyRandomIntRange(1, 2);
 
 		switch (type) {
-//		case 1:
-//			area = halfCircle();
-//			break;
+		// case 1:
+		// area = halfCircle();
+		// break;
 		case 1:
 			area = halfTriangle();
 			break;
-//		case 3:
-//			area = halfCircleAlternative();
-//			break;
+		// case 3:
+		// area = halfCircleAlternative();
+		// break;
 		case 2:
 			area = halfTriangleAlternative();
 			break;
@@ -151,6 +151,14 @@ public class ShipBuilderUtils {
 
 	}
 
+	public static void addSpine(Area area) {
+
+		area.add(new Area(new Rectangle2D.Double(area.getBounds2D().getMinX(),
+				RandomInt.anyRandomIntRange((int) area.getBounds2D().getCenterY(), (int) area.getBounds2D().getMinY()) - 20,
+				RandomInt.anyRandomIntRange(1, 10), RandomInt.anyRandomIntRange(1, 20))));
+
+	}
+
 	public static void subtract(Area area) {
 
 		Point2D.Double point = findPointWithinArea(area);
@@ -168,16 +176,16 @@ public class ShipBuilderUtils {
 				RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinY(), (int) area.getBounds2D().getMaxY()));
 
 		int count = 0;
-		
+
 		while (!area.contains(point)) {
 
 			point = new Point2D.Double(
 					RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinX(), (int) area.getBounds2D().getMaxX()),
 					RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinY(),
 							(int) area.getBounds2D().getMaxY()));
-			
+
 			count++;
-			
+
 			// Safeguard against infinite loops
 			if (count == 1000) {
 				break;

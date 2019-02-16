@@ -322,6 +322,22 @@ public class Vessel {
 		}
 
 	}
+	
+	public void addSpine() {
+
+		try {
+			
+			ShipBuilderUtils.addSpine(this.area);
+			generateImage();
+			calculateBounds();
+			
+		} catch (Exception ex) {
+			
+			// Do Nothing
+			
+		}
+
+	}	
 
 	public void subtract() {
 

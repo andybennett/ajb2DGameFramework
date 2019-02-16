@@ -167,7 +167,12 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 				vessel.subtract();
 
+			} else if (e.getKeyCode() == KeyEvent.VK_D) {
+
+				vessel.addSpine();
+
 			}
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
