@@ -6,6 +6,7 @@ import ajb.random.RandomInt;
 
 public class Colours {
 
+	public static Color background = Color.decode("#242424");
     public static Color blue = Color.decode("#8ac6f2");
     public static Color red = Color.decode("#f08080");
     public static Color green = Color.decode("#cae682");

@@ -49,18 +49,18 @@ public class ShipBuilderUtils {
 
 	public static BufferedImage generateImage() {
 
-		Area ship = generate();
+		Area ship1 = generate();
 
 		GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
 				.getDefaultConfiguration();
-		BufferedImage img = gc.createCompatibleImage((int) ship.getBounds2D().getMaxX(),
-				(int) ship.getBounds2D().getMaxY(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage img = gc.createCompatibleImage((int) ship1.getBounds2D().getMaxX(), (int) ship1.getBounds2D().getMaxY(),
+				BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D gr = (Graphics2D) img.getGraphics();
 
 		gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		gr.setColor(Color.decode("#242424").brighter());
-		gr.fill(ship);
+		gr.setColor(Colours.gray);
+		gr.fill(ship1);
 		gr.dispose();
 
 		return img;
@@ -74,11 +74,17 @@ public class ShipBuilderUtils {
 		int type = RandomInt.anyRandomIntRange(1, 2);
 
 		switch (type) {
+//		case 1:
+//			area = halfCircle();
+//			break;
 		case 1:
-			area = halfCircle();
-			break;
-		case 2:
 			area = halfTriangle();
+			break;
+//		case 3:
+//			area = halfCircleAlternative();
+//			break;
+		case 2:
+			area = halfTriangleAlternative();
 			break;
 		}
 
@@ -97,10 +103,6 @@ public class ShipBuilderUtils {
 
 		}
 
-		// Mirror horizontally
-		area.add(mirrorAlongX((int) area.getBounds2D().getMinX(), area));
-		area = translateToTopLeft(area);
-
 		return area;
 
 	}
@@ -114,9 +116,28 @@ public class ShipBuilderUtils {
 
 	}
 
+	public static Area halfTriangleAlternative() {
+
+		int[] xpoints = new int[] { 0, 40, 0 };
+		int[] ypoints = new int[] { 0, 170, 170 };
+
+		return new Area(new Polygon(xpoints, ypoints, 3));
+
+	}
+
 	public static Area halfCircle() {
 
-		return new Area(new Arc2D.Double(0, 0, 100, 100, 0, 90, Arc2D.PIE));
+		return new Area(new Arc2D.Double(0, 0, 40, 40, 0, 90, Arc2D.PIE));
+
+	}
+
+	public static Area halfCircleAlternative() {
+
+		Area area = new Area();
+		area.add(new Area(new Arc2D.Double(0, 0, 30, 30, 0, 90, Arc2D.PIE)));
+		area.add(new Area(new Rectangle2D.Double(30, 0, 5, 50)));
+
+		return area;
 
 	}
 
@@ -124,8 +145,8 @@ public class ShipBuilderUtils {
 
 		Point2D.Double point = findPointWithinArea(area);
 
-		area.add(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(0, 2),
-				point.y + RandomInt.anyRandomIntRange(0, 2), RandomInt.anyRandomIntRange(1, 10),
+		area.add(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(-5, 5),
+				point.y + RandomInt.anyRandomIntRange(-5, 5), RandomInt.anyRandomIntRange(1, 10),
 				RandomInt.anyRandomIntRange(1, 20))));
 
 	}
@@ -134,8 +155,8 @@ public class ShipBuilderUtils {
 
 		Point2D.Double point = findPointWithinArea(area);
 
-		area.subtract(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(0, 2),
-				point.y + RandomInt.anyRandomIntRange(0, 2), RandomInt.anyRandomIntRange(1, 10),
+		area.subtract(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(-5, 5),
+				point.y + RandomInt.anyRandomIntRange(-5, 5), RandomInt.anyRandomIntRange(1, 10),
 				RandomInt.anyRandomIntRange(1, 20))));
 
 	}
@@ -146,12 +167,21 @@ public class ShipBuilderUtils {
 				RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinX(), (int) area.getBounds2D().getMaxX()),
 				RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinY(), (int) area.getBounds2D().getMaxY()));
 
+		int count = 0;
+		
 		while (!area.contains(point)) {
 
 			point = new Point2D.Double(
 					RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinX(), (int) area.getBounds2D().getMaxX()),
 					RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinY(),
 							(int) area.getBounds2D().getMaxY()));
+			
+			count++;
+			
+			// Safeguard against infinite loops
+			if (count == 1000) {
+				break;
+			}
 
 		}
 

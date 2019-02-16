@@ -3,7 +3,10 @@ package ajb.examples.helpers;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
 import java.awt.Polygon;
+import java.awt.RenderingHints;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -11,13 +14,15 @@ import java.awt.image.BufferedImage;
 public class Vessel {
 
 	public BufferedImage img = null;
+	public Area area = null;
 
 	public Point2D.Double center = null;
 
-	Hex bounds = null;
-	Hex armour = null;
-	Hex shields = null;
+	Hex boundsHex = null;
+	Hex armourHex = null;
+	Hex shieldsHex = null;
 
+	Area shields = null;
 	Area northShields = null;
 	Area northEastShields = null;
 	Area southEastShields = null;
@@ -37,167 +42,221 @@ public class Vessel {
 	final static BasicStroke dashed = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1,
 			0.0f);
 
-	public Vessel(BufferedImage img, Point2D.Double center) {
+	public Vessel(Area area, Point2D.Double center) {
 
-		this.img = img;
+		this.area = area;
 		this.center = center;
-		
-		int size = img.getHeight() > img.getWidth() ? img.getHeight() : img.getWidth();
-		
-		bounds = new Hex(this.center, "", size);
-		armour = new Hex(this.center, "", size + 10);
-		shields = new Hex(this.center, "", size + 25);
 
-		northShields = new Area(new Polygon(
-				new int[] { (int) armour.getNorthWestPoint().getX(), (int) shields.getNorthWestPoint().getX(),
-						(int) shields.getNorthEastPoint().getX(), (int) armour.getNorthEastPoint().getX() },
-				new int[] { (int) armour.getNorthWestPoint().getY(), (int) shields.getNorthWestPoint().getY(),
-						(int) shields.getNorthEastPoint().getY(), (int) armour.getNorthEastPoint().getY() },
-				4));
+		generateImage();
+		calculateBounds();
 
-		northEastShields = new Area(new Polygon(
-				new int[] { (int) armour.getNorthEastPoint().getX(), (int) shields.getNorthEastPoint().getX(),
-						(int) shields.getEastPoint().getX(), (int) armour.getEastPoint().getX() },
-				new int[] { (int) armour.getNorthEastPoint().getY(), (int) shields.getNorthEastPoint().getY(),
-						(int) shields.getEastPoint().getY(), (int) armour.getEastPoint().getY() },
-				4));
+	}
 
-		southEastShields = new Area(new Polygon(
-				new int[] { (int) armour.getEastPoint().getX(), (int) shields.getEastPoint().getX(),
-						(int) shields.getSouthEastPoint().getX(), (int) armour.getSouthEastPoint().getX() },
-				new int[] { (int) armour.getEastPoint().getY(), (int) shields.getEastPoint().getY(),
-						(int) shields.getSouthEastPoint().getY(), (int) armour.getSouthEastPoint().getY() },
-				4));
+	public void calculateBounds() {
 
-//		southShields = new Area(new Polygon(
-//				new int[] { (int) armour.getSouthEastPoint().getX(), (int) shields.getSouthEastPoint().getX(),
-//						(int) shields.getSouthWestPoint().getX(), (int) armour.getSouthWestPoint().getX() },
-//				new int[] { (int) armour.getSouthEastPoint().getY(), (int) shields.getSouthEastPoint().getY(),
-//						(int) shields.getSouthWestPoint().getY(), (int) armour.getSouthWestPoint().getY() },
-//				4));
+		if (this.img != null) {
 
-		southWestShields = new Area(new Polygon(
-				new int[] { (int) armour.getSouthWestPoint().getX(), (int) shields.getSouthWestPoint().getX(),
-						(int) shields.getWestPoint().getX(), (int) armour.getWestPoint().getX() },
-				new int[] { (int) armour.getSouthWestPoint().getY(), (int) shields.getSouthWestPoint().getY(),
-						(int) shields.getWestPoint().getY(), (int) armour.getWestPoint().getY() },
-				4));
+			int size = img.getHeight() > img.getWidth() ? img.getHeight() : img.getWidth();
 
-		northWestShields = new Area(new Polygon(
-				new int[] { (int) armour.getWestPoint().getX(), (int) shields.getWestPoint().getX(),
-						(int) shields.getNorthWestPoint().getX(), (int) armour.getNorthWestPoint().getX() },
-				new int[] { (int) armour.getWestPoint().getY(), (int) shields.getWestPoint().getY(),
-						(int) shields.getNorthWestPoint().getY(), (int) armour.getNorthWestPoint().getY() },
-				4));
+			boundsHex = new Hex(this.center, "", size);
+			armourHex = new Hex(this.center, "", size + 20);
+			shieldsHex = new Hex(this.center, "", size + 30);
 
-		northArmour = new Area(new Polygon(
-				new int[] { (int) bounds.getNorthWestPoint().getX(), (int) armour.getNorthWestPoint().getX(),
-						(int) armour.getNorthEastPoint().getX(), (int) bounds.getNorthEastPoint().getX() },
-				new int[] { (int) bounds.getNorthWestPoint().getY(), (int) armour.getNorthWestPoint().getY(),
-						(int) armour.getNorthEastPoint().getY(), (int) bounds.getNorthEastPoint().getY() },
-				4));
+			northShields = new Area(new Polygon(
+					new int[] { (int) armourHex.getNorthWestPoint().getX(), (int) shieldsHex.getNorthWestPoint().getX(),
+							(int) shieldsHex.getNorthEastPoint().getX(), (int) armourHex.getNorthEastPoint().getX() },
+					new int[] { (int) armourHex.getNorthWestPoint().getY(), (int) shieldsHex.getNorthWestPoint().getY(),
+							(int) shieldsHex.getNorthEastPoint().getY(), (int) armourHex.getNorthEastPoint().getY() },
+					4));
 
-		northEastArmour = new Area(new Polygon(
-				new int[] { (int) bounds.getNorthEastPoint().getX(), (int) armour.getNorthEastPoint().getX(),
-						(int) armour.getEastPoint().getX(), (int) bounds.getEastPoint().getX() },
-				new int[] { (int) bounds.getNorthEastPoint().getY(), (int) armour.getNorthEastPoint().getY(),
-						(int) armour.getEastPoint().getY(), (int) bounds.getEastPoint().getY() },
-				4));
+			northEastShields = new Area(new Polygon(
+					new int[] { (int) armourHex.getNorthEastPoint().getX(), (int) shieldsHex.getNorthEastPoint().getX(),
+							(int) shieldsHex.getEastPoint().getX(), (int) armourHex.getEastPoint().getX() },
+					new int[] { (int) armourHex.getNorthEastPoint().getY(), (int) shieldsHex.getNorthEastPoint().getY(),
+							(int) shieldsHex.getEastPoint().getY(), (int) armourHex.getEastPoint().getY() },
+					4));
 
-		southEastArmour = new Area(new Polygon(
-				new int[] { (int) bounds.getEastPoint().getX(), (int) armour.getEastPoint().getX(),
-						(int) armour.getSouthEastPoint().getX(), (int) bounds.getSouthEastPoint().getX() },
-				new int[] { (int) bounds.getEastPoint().getY(), (int) armour.getEastPoint().getY(),
-						(int) armour.getSouthEastPoint().getY(), (int) bounds.getSouthEastPoint().getY() },
-				4));
+			southEastShields = new Area(new Polygon(
+					new int[] { (int) armourHex.getEastPoint().getX(), (int) shieldsHex.getEastPoint().getX(),
+							(int) shieldsHex.getSouthEastPoint().getX(), (int) armourHex.getSouthEastPoint().getX() },
+					new int[] { (int) armourHex.getEastPoint().getY(), (int) shieldsHex.getEastPoint().getY(),
+							(int) shieldsHex.getSouthEastPoint().getY(), (int) armourHex.getSouthEastPoint().getY() },
+					4));
 
-//		southArmour = new Area(new Polygon(
-//				new int[] { (int) bounds.getSouthEastPoint().getX(), (int) armour.getSouthEastPoint().getX(),
-//						(int) armour.getSouthWestPoint().getX(), (int) bounds.getSouthWestPoint().getX() },
-//				new int[] { (int) bounds.getSouthEastPoint().getY(), (int) armour.getSouthEastPoint().getY(),
-//						(int) armour.getSouthWestPoint().getY(), (int) bounds.getSouthWestPoint().getY() },
-//				4));
+			// southShields = new Area(new Polygon(
+			// new int[] { (int) armour.getSouthEastPoint().getX(), (int)
+			// shields.getSouthEastPoint().getX(),
+			// (int) shields.getSouthWestPoint().getX(), (int)
+			// armour.getSouthWestPoint().getX() },
+			// new int[] { (int) armour.getSouthEastPoint().getY(), (int)
+			// shields.getSouthEastPoint().getY(),
+			// (int) shields.getSouthWestPoint().getY(), (int)
+			// armour.getSouthWestPoint().getY() },
+			// 4));
 
-		southWestArmour = new Area(new Polygon(
-				new int[] { (int) bounds.getSouthWestPoint().getX(), (int) armour.getSouthWestPoint().getX(),
-						(int) armour.getWestPoint().getX(), (int) bounds.getWestPoint().getX() },
-				new int[] { (int) bounds.getSouthWestPoint().getY(), (int) armour.getSouthWestPoint().getY(),
-						(int) armour.getWestPoint().getY(), (int) bounds.getWestPoint().getY() },
-				4));
+			southWestShields = new Area(new Polygon(
+					new int[] { (int) armourHex.getSouthWestPoint().getX(), (int) shieldsHex.getSouthWestPoint().getX(),
+							(int) shieldsHex.getWestPoint().getX(), (int) armourHex.getWestPoint().getX() },
+					new int[] { (int) armourHex.getSouthWestPoint().getY(), (int) shieldsHex.getSouthWestPoint().getY(),
+							(int) shieldsHex.getWestPoint().getY(), (int) armourHex.getWestPoint().getY() },
+					4));
 
-		northWestArmour = new Area(new Polygon(
-				new int[] { (int) bounds.getWestPoint().getX(), (int) armour.getWestPoint().getX(),
-						(int) armour.getNorthWestPoint().getX(), (int) bounds.getNorthWestPoint().getX() },
-				new int[] { (int) bounds.getWestPoint().getY(), (int) armour.getWestPoint().getY(),
-						(int) armour.getNorthWestPoint().getY(), (int) bounds.getNorthWestPoint().getY() },
-				4));
+			northWestShields = new Area(new Polygon(
+					new int[] { (int) armourHex.getWestPoint().getX(), (int) shieldsHex.getWestPoint().getX(),
+							(int) shieldsHex.getNorthWestPoint().getX(), (int) armourHex.getNorthWestPoint().getX() },
+					new int[] { (int) armourHex.getWestPoint().getY(), (int) shieldsHex.getWestPoint().getY(),
+							(int) shieldsHex.getNorthWestPoint().getY(), (int) armourHex.getNorthWestPoint().getY() },
+					4));
+
+			shields = new Area();
+			shields.add(northShields);
+			shields.add(northEastShields);
+			shields.add(southEastShields);
+			shields.add(southWestShields);
+			shields.add(northWestShields);
+
+			northArmour = new Area(new Polygon(
+					new int[] { (int) boundsHex.getNorthWestPoint().getX(), (int) armourHex.getNorthWestPoint().getX(),
+							(int) armourHex.getNorthEastPoint().getX(), (int) boundsHex.getNorthEastPoint().getX() },
+					new int[] { (int) boundsHex.getNorthWestPoint().getY(), (int) armourHex.getNorthWestPoint().getY(),
+							(int) armourHex.getNorthEastPoint().getY(), (int) boundsHex.getNorthEastPoint().getY() },
+					4));
+
+			northEastArmour = new Area(new Polygon(
+					new int[] { (int) boundsHex.getNorthEastPoint().getX(), (int) armourHex.getNorthEastPoint().getX(),
+							(int) armourHex.getEastPoint().getX(), (int) boundsHex.getEastPoint().getX() },
+					new int[] { (int) boundsHex.getNorthEastPoint().getY(), (int) armourHex.getNorthEastPoint().getY(),
+							(int) armourHex.getEastPoint().getY(), (int) boundsHex.getEastPoint().getY() },
+					4));
+
+			southEastArmour = new Area(new Polygon(
+					new int[] { (int) boundsHex.getEastPoint().getX(), (int) armourHex.getEastPoint().getX(),
+							(int) armourHex.getSouthEastPoint().getX(), (int) boundsHex.getSouthEastPoint().getX() },
+					new int[] { (int) boundsHex.getEastPoint().getY(), (int) armourHex.getEastPoint().getY(),
+							(int) armourHex.getSouthEastPoint().getY(), (int) boundsHex.getSouthEastPoint().getY() },
+					4));
+
+			// southArmour = new Area(new Polygon(
+			// new int[] { (int) bounds.getSouthEastPoint().getX(), (int)
+			// armour.getSouthEastPoint().getX(),
+			// (int) armour.getSouthWestPoint().getX(), (int)
+			// bounds.getSouthWestPoint().getX() },
+			// new int[] { (int) bounds.getSouthEastPoint().getY(), (int)
+			// armour.getSouthEastPoint().getY(),
+			// (int) armour.getSouthWestPoint().getY(), (int)
+			// bounds.getSouthWestPoint().getY() },
+			// 4));
+
+			southWestArmour = new Area(new Polygon(
+					new int[] { (int) boundsHex.getSouthWestPoint().getX(), (int) armourHex.getSouthWestPoint().getX(),
+							(int) armourHex.getWestPoint().getX(), (int) boundsHex.getWestPoint().getX() },
+					new int[] { (int) boundsHex.getSouthWestPoint().getY(), (int) armourHex.getSouthWestPoint().getY(),
+							(int) armourHex.getWestPoint().getY(), (int) boundsHex.getWestPoint().getY() },
+					4));
+
+			northWestArmour = new Area(new Polygon(
+					new int[] { (int) boundsHex.getWestPoint().getX(), (int) armourHex.getWestPoint().getX(),
+							(int) armourHex.getNorthWestPoint().getX(), (int) boundsHex.getNorthWestPoint().getX() },
+					new int[] { (int) boundsHex.getWestPoint().getY(), (int) armourHex.getWestPoint().getY(),
+							(int) armourHex.getNorthWestPoint().getY(), (int) boundsHex.getNorthWestPoint().getY() },
+					4));
+		}
 	}
 
 	public void draw(Graphics2D g2d) {
 
-		g2d.rotate(Math.toRadians(rotationInDegrees), center.getX(), center.getY());
+		try {
+			
+			g2d.rotate(Math.toRadians(rotationInDegrees), center.getX(), center.getY());
 
-		// g2d.setStroke(dashed);
+			// g2d.setStroke(dashed);
 
-		// Boundary Hex
-		g2d.setColor(Color.decode("#242424"));
-		 g2d.fill(bounds.getPoly());
-		// g2d.draw(armour.getArea());
-		// g2d.draw(shields.getArea());
+			// Boundary Hex
+			g2d.setColor(makeTransparent(Colours.background, 200));
+			g2d.fill(boundsHex.getPoly());
+			// g2d.draw(armour.getArea());
+			// g2d.draw(shields.getArea());
 
-		g2d.drawImage(img, null, (int) center.getX() - (img.getWidth() / 2),
-				(int) center.getY() - (img.getHeight() / 2));
+			if (img != null) {
+				g2d.drawImage(img, null, (int) center.getX() - (img.getWidth() / 2),
+						(int) center.getY() - (img.getHeight() / 2));
 
-		g2d.setColor(getColor(100));
-		g2d.fill(northShields);
-		g2d.setColor(getColor(80));
-		g2d.fill(northEastShields);
-		g2d.setColor(getColor(60));
-		g2d.fill(southEastShields);
-//		g2d.setColor(getColor(50));
-//		g2d.fill(southShields);
-		g2d.setColor(getColor(20));
-		g2d.fill(southWestShields);
-		g2d.setColor(getColor(0));
-		g2d.fill(northWestShields);
+				g2d.setColor(getColor(100));
+				g2d.fill(shields);
 
-		g2d.setColor(getColor(100));
-		g2d.fill(northArmour);
-		g2d.setColor(getColor(100));
-		g2d.fill(northEastArmour);
-		g2d.setColor(getColor(100));
-		g2d.fill(southEastArmour);
-//		g2d.setColor(getColor(100));
-//		g2d.fill(southArmour);
-		g2d.setColor(getColor(100));
-		g2d.fill(southWestArmour);
-		g2d.setColor(getColor(100));
-		g2d.fill(northWestArmour);
+				g2d.setColor(getColor(100));
+				g2d.fill(northArmour);
+				g2d.setColor(getColor(100));
+				g2d.fill(northEastArmour);
+				g2d.setColor(getColor(100));
+				g2d.fill(southEastArmour);
+				// g2d.setColor(getColor(100));
+				// g2d.fill(southArmour);
+				g2d.setColor(getColor(100));
+				g2d.fill(southWestArmour);
+				g2d.setColor(getColor(100));
+				g2d.fill(northWestArmour);
 
-		g2d.setColor(Color.BLACK);
-		g2d.draw(northShields);
-		g2d.draw(northEastShields);
-		g2d.draw(southEastShields);
-//		g2d.draw(southShields);
-		g2d.draw(southWestShields);
-		g2d.draw(northWestShields);
-		g2d.draw(northArmour);
-		g2d.draw(northEastArmour);
-		g2d.draw(southEastArmour);
-//		g2d.draw(southArmour);
-		g2d.draw(southWestArmour);
-		g2d.draw(northWestArmour);
+				g2d.setColor(Color.BLACK);
+				g2d.draw(northShields);
+				g2d.draw(northEastShields);
+				g2d.draw(southEastShields);
+				// g2d.draw(southShields);
+				g2d.draw(southWestShields);
+				g2d.draw(northWestShields);
+				g2d.draw(northArmour);
+				g2d.draw(northEastArmour);
+				g2d.draw(southEastArmour);
+				// g2d.draw(southArmour);
+				g2d.draw(southWestArmour);
+				g2d.draw(northWestArmour);
 
-	}
-	
-	public void drawDisplay(Graphics2D g2d) {
-		
-		g2d.setColor(Color.decode("#242424"));
-		g2d.fillRect(0, 0, img.getWidth() * 2 + 20, img.getHeight() * 2 + 20);
-		
-		g2d.scale(2, 2);
-		g2d.drawImage(img, null, 10, 10);
-		
+				g2d.setColor(Colours.white.darker());
+				String hp = String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100)));
+				int stringWidth = g2d.getFontMetrics().stringWidth(hp);
+				g2d.drawString(hp, (int) center.getX() - (stringWidth / 2),
+						(int) shieldsHex.getSouthWestPoint().getY());
+
+				String armourNorth = String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 2)) + " / "
+						+ String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 3));
+				stringWidth = g2d.getFontMetrics().stringWidth(armourNorth);
+				g2d.drawString(armourNorth, (int) center.getX() - (stringWidth / 2),
+						(int) shieldsHex.getNorthWestPoint().getY() - 20);
+
+				String armourNorthWest = String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 2))
+						+ " / " + String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 3));
+				stringWidth = g2d.getFontMetrics().stringWidth(armourNorthWest);
+				g2d.drawString(armourNorthWest,
+						(int) (northWestShields.getBounds2D().getCenterX() - 40) - (stringWidth / 2),
+						(int) northWestShields.getBounds2D().getCenterY());
+
+				String armourNorthEast = String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 2))
+						+ " / " + String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 3));
+				stringWidth = g2d.getFontMetrics().stringWidth(armourNorthEast);
+				g2d.drawString(armourNorthEast,
+						(int) (northEastShields.getBounds2D().getCenterX() + 40) - (stringWidth / 2),
+						(int) northEastShields.getBounds2D().getCenterY());
+
+				String armourSouthWest = String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 2))
+						+ " / " + String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 4));
+				stringWidth = g2d.getFontMetrics().stringWidth(armourSouthWest);
+				g2d.drawString(armourSouthWest,
+						(int) (southWestShields.getBounds2D().getCenterX() - 40) - (stringWidth / 2),
+						(int) southWestShields.getBounds2D().getCenterY());
+
+				String armourSouthEast = String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 2))
+						+ " / " + String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 4));
+				stringWidth = g2d.getFontMetrics().stringWidth(armourSouthEast);
+				g2d.drawString(armourSouthEast,
+						(int) (southEastShields.getBounds2D().getCenterX() + 40) - (stringWidth / 2),
+						(int) southEastShields.getBounds2D().getCenterY());
+			}
+		} catch (Exception ex) {
+			
+			// Do Nothing
+			
+		}
+
 	}
 
 	public static Color makeTransparent(Color source, int alpha) {
@@ -214,5 +273,68 @@ public class Vessel {
 		double B = 0.3; // Brightness
 
 		return Color.getHSBColor((float) H, (float) S, (float) B);
+	}
+
+	public void generateImage() {
+
+		try {
+
+			Area result = new Area(area);
+
+			// Mirror horizontally
+			result.add(ShipBuilderUtils.mirrorAlongX((int) result.getBounds2D().getMinX(), result));
+			result = ShipBuilderUtils.translateToTopLeft(result);
+
+			GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
+					.getDefaultConfiguration();
+			BufferedImage img = gc.createCompatibleImage((int) result.getBounds2D().getMaxX(),
+					(int) result.getBounds2D().getMaxY(), BufferedImage.TYPE_INT_ARGB);
+
+			Graphics2D gr = (Graphics2D) img.getGraphics();
+
+			gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			gr.setColor(Colours.gray);
+			gr.fill(result);
+			gr.dispose();
+
+			this.img = img;
+
+		} catch (Exception ex) {
+
+			// Do Nothing
+
+		}
+
+	}
+
+	public void add() {
+
+		try {
+			
+			ShipBuilderUtils.add(this.area);
+			generateImage();
+			calculateBounds();
+			
+		} catch (Exception ex) {
+			
+			// Do Nothing
+			
+		}
+
+	}
+
+	public void subtract() {
+
+		try {
+			
+			ShipBuilderUtils.subtract(this.area);
+			generateImage();
+			calculateBounds();
+			
+		} catch (Exception ex) {
+			
+			// Do Nothing
+			
+		}
 	}
 }

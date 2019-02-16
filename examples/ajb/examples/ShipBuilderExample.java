@@ -86,10 +86,6 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 		starfield.draw(g);
 
-		if (vessel != null) {
-			vessel.drawDisplay(g);
-		}
-
 	}
 
 	@Override
@@ -110,58 +106,70 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 	@Override
 	public void keyPressed(KeyEvent e) {
 
-		if (e.getKeyCode() == KeyEvent.VK_HOME) {
+		try {
+			if (e.getKeyCode() == KeyEvent.VK_HOME) {
 
-			moveToShip();
+				moveToShip();
 
-		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 
-			vessel = new Vessel(ShipBuilderUtils.generateImage(),
-					new Point2D.Double(this.getWidth() / 2, this.getHeight() / 2));
+				vessel = new Vessel(ShipBuilderUtils.generate(),
+						new Point2D.Double(this.getWidth() / 2, this.getHeight() / 2));
 
-		} else if (e.getKeyCode() == KeyEvent.VK_F11) {
+			} else if (e.getKeyCode() == KeyEvent.VK_F11) {
 
-			if (!frame.isUndecorated()) {
+				if (!frame.isUndecorated()) {
 
-				GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-				int width = gd.getDisplayMode().getWidth();
-				int height = gd.getDisplayMode().getHeight();
+					GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+					int width = gd.getDisplayMode().getWidth();
+					int height = gd.getDisplayMode().getHeight();
 
-				frame.dispose();
-				frame.setVisible(false);
-				frame.setUndecorated(true);
-				frame.setSize(width, height);
-				frame.setLocationRelativeTo(null);
-				frame.setVisible(true);
+					frame.dispose();
+					frame.setVisible(false);
+					frame.setUndecorated(true);
+					frame.setSize(width, height);
+					frame.setLocationRelativeTo(null);
+					frame.setVisible(true);
 
-			} else {
+				} else {
 
-				frame.dispose();
-				frame.setVisible(false);
-				frame.setUndecorated(false);
-				frame.setSize(windowedWidth, windowedHeight);
-				frame.setVisible(true);
+					frame.dispose();
+					frame.setVisible(false);
+					frame.setUndecorated(false);
+					frame.setSize(windowedWidth, windowedHeight);
+					frame.setVisible(true);
+
+				}
+
+			} else if (e.getKeyCode() == KeyEvent.VK_1) {
+
+				coordTransform.setToScale(1, 1);
+
+				moveToShip();
+
+			} else if (e.getKeyCode() == KeyEvent.VK_2) {
+
+				coordTransform.setToScale(0.5, 0.5);
+
+				moveToShip();
+
+			} else if (e.getKeyCode() == KeyEvent.VK_3) {
+
+				coordTransform.setToScale(0.2, 0.2);
+
+				moveToShip();
+
+			} else if (e.getKeyCode() == KeyEvent.VK_A) {
+
+				vessel.add();
+
+			} else if (e.getKeyCode() == KeyEvent.VK_S) {
+
+				vessel.subtract();
 
 			}
-
-		} else if (e.getKeyCode() == KeyEvent.VK_1) {
-
-			coordTransform.setToScale(1, 1);
-
-			moveToShip();
-
-		} else if (e.getKeyCode() == KeyEvent.VK_2) {
-
-			coordTransform.setToScale(0.5, 0.5);
-
-			moveToShip();
-
-		} else if (e.getKeyCode() == KeyEvent.VK_3) {
-
-			coordTransform.setToScale(0.2, 0.2);
-
-			moveToShip();
-
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 
 	}
@@ -172,8 +180,9 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 			try {
 
-				moveToPoint(transformPoint(new Point2D.Double((vessel.center.getX() - (this.getWidth() / 2)),
-						(vessel.center.getY() - (this.getHeight() / 2)))));
+				moveToPoint(transformPoint(
+						new Point2D.Double((vessel.center.getX() - (this.getWidth() / 2) * coordTransform.getScaleX()),
+								(vessel.center.getY() - (this.getHeight() / 2) * coordTransform.getScaleY()))));
 
 			} catch (NoninvertibleTransformException e1) {
 
