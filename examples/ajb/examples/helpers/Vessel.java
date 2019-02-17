@@ -18,8 +18,10 @@ public class Vessel {
 
 	public BufferedImage img = null;
 	public Area area = null;
-
+	public Area bounds = null;
 	public Point2D.Double center = null;
+
+	public boolean selected = false;
 
 	Hex boundsHex = null;
 	Hex armourHex = null;
@@ -66,6 +68,8 @@ public class Vessel {
 			boundsHex = new Hex(this.center, "", size);
 			armourHex = new Hex(this.center, "", size + 20);
 			shieldsHex = new Hex(this.center, "", size + 30);
+
+			bounds = new Area(shieldsHex.getPoly());
 
 			northShields = new Area(new Polygon(
 					new int[] { (int) armourHex.getNorthWestPoint().getX(), (int) shieldsHex.getNorthWestPoint().getX(),
@@ -188,70 +192,78 @@ public class Vessel {
 				g2d.drawImage(img, null, (int) center.getX() - (img.getWidth() / 2),
 						(int) center.getY() - (img.getHeight() / 2));
 
-				g2d.setColor(getColor(100));
-				g2d.fill(shields);
+				if (selected) {
 
-				g2d.setColor(getColor(100));
-				g2d.fill(northArmour);
-				g2d.setColor(getColor(100));
-				g2d.fill(northEastArmour);
-				g2d.setColor(getColor(100));
-				g2d.fill(southEastArmour);
-				// g2d.setColor(getColor(100));
-				// g2d.fill(southArmour);
-				g2d.setColor(getColor(100));
-				g2d.fill(southWestArmour);
-				g2d.setColor(getColor(100));
-				g2d.fill(northWestArmour);
+					g2d.setColor(getColor(30));
+					g2d.fill(shields);
 
-				g2d.setColor(Color.BLACK);
-				g2d.draw(northShields);
-				g2d.draw(northEastShields);
-				g2d.draw(southEastShields);
-				// g2d.draw(southShields);
-				g2d.draw(southWestShields);
-				g2d.draw(northWestShields);
-				g2d.draw(northArmour);
-				g2d.draw(northEastArmour);
-				g2d.draw(southEastArmour);
-				// g2d.draw(southArmour);
-				g2d.draw(southWestArmour);
-				g2d.draw(northWestArmour);
+					g2d.setColor(getColor(100));
+					g2d.fill(northArmour);
+					g2d.setColor(getColor(100));
+					g2d.fill(northEastArmour);
+					g2d.setColor(getColor(100));
+					g2d.fill(southEastArmour);
+					// g2d.setColor(getColor(100));
+					// g2d.fill(southArmour);
+					g2d.setColor(getColor(100));
+					g2d.fill(southWestArmour);
+					g2d.setColor(getColor(100));
+					g2d.fill(northWestArmour);
 
-				g2d.setColor(Colours.green);
-				String hp = String.valueOf(Math.round(hull / 10));
-				int stringWidth = g2d.getFontMetrics().stringWidth(hp);
-				g2d.drawString(hp, (int) center.getX() - (stringWidth / 2),
-						(int) shieldsHex.getSouthWestPoint().getY());
+					g2d.setColor(Color.BLACK);
+					g2d.draw(northShields);
+					g2d.draw(northEastShields);
+					g2d.draw(southEastShields);
+					// g2d.draw(southShields);
+					g2d.draw(southWestShields);
+					g2d.draw(northWestShields);
+					g2d.draw(northArmour);
+					g2d.draw(northEastArmour);
+					g2d.draw(southEastArmour);
+					// g2d.draw(southArmour);
+					g2d.draw(southWestArmour);
+					g2d.draw(northWestArmour);
 
-				String armourNorth = String.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
-				stringWidth = g2d.getFontMetrics().stringWidth(armourNorth);
-				g2d.drawString(armourNorth, (int) center.getX() - (stringWidth / 2),
-						(int) shieldsHex.getNorthWestPoint().getY() - 20);
+					g2d.setColor(Colours.green);
+					String hp = String.valueOf(Math.round(hull / 10));
+					int stringWidth = g2d.getFontMetrics().stringWidth(hp);
+					g2d.drawString(hp, (int) center.getX() - (stringWidth / 2),
+							(int) shieldsHex.getSouthWestPoint().getY());
 
-				String armourNorthWest = String.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
-				stringWidth = g2d.getFontMetrics().stringWidth(armourNorthWest);
-				g2d.drawString(armourNorthWest,
-						(int) (northWestShields.getBounds2D().getCenterX() - 50) - (stringWidth / 2),
-						(int) northWestShields.getBounds2D().getCenterY());
+					String armourNorth = String
+							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
+					stringWidth = g2d.getFontMetrics().stringWidth(armourNorth);
+					g2d.drawString(armourNorth, (int) center.getX() - (stringWidth / 2),
+							(int) shieldsHex.getNorthWestPoint().getY() - 20);
 
-				String armourNorthEast = String.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
-				stringWidth = g2d.getFontMetrics().stringWidth(armourNorthEast);
-				g2d.drawString(armourNorthEast,
-						(int) (northEastShields.getBounds2D().getCenterX() + 50) - (stringWidth / 2),
-						(int) northEastShields.getBounds2D().getCenterY());
+					String armourNorthWest = String
+							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
+					stringWidth = g2d.getFontMetrics().stringWidth(armourNorthWest);
+					g2d.drawString(armourNorthWest,
+							(int) (northWestShields.getBounds2D().getCenterX() - 50) - (stringWidth / 2),
+							(int) northWestShields.getBounds2D().getCenterY());
 
-				String armourSouthWest = String.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 4)));
-				stringWidth = g2d.getFontMetrics().stringWidth(armourSouthWest);
-				g2d.drawString(armourSouthWest,
-						(int) (southWestShields.getBounds2D().getCenterX() - 50) - (stringWidth / 2),
-						(int) southWestShields.getBounds2D().getCenterY());
+					String armourNorthEast = String
+							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
+					stringWidth = g2d.getFontMetrics().stringWidth(armourNorthEast);
+					g2d.drawString(armourNorthEast,
+							(int) (northEastShields.getBounds2D().getCenterX() + 50) - (stringWidth / 2),
+							(int) northEastShields.getBounds2D().getCenterY());
 
-				String armourSouthEast = String.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 4)));
-				stringWidth = g2d.getFontMetrics().stringWidth(armourSouthEast);
-				g2d.drawString(armourSouthEast,
-						(int) (southEastShields.getBounds2D().getCenterX() + 50) - (stringWidth / 2),
-						(int) southEastShields.getBounds2D().getCenterY());
+					String armourSouthWest = String
+							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 4)));
+					stringWidth = g2d.getFontMetrics().stringWidth(armourSouthWest);
+					g2d.drawString(armourSouthWest,
+							(int) (southWestShields.getBounds2D().getCenterX() - 50) - (stringWidth / 2),
+							(int) southWestShields.getBounds2D().getCenterY());
+
+					String armourSouthEast = String
+							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 4)));
+					stringWidth = g2d.getFontMetrics().stringWidth(armourSouthEast);
+					g2d.drawString(armourSouthEast,
+							(int) (southEastShields.getBounds2D().getCenterX() + 50) - (stringWidth / 2),
+							(int) southEastShields.getBounds2D().getCenterY());
+				}
 			}
 
 		} catch (Exception ex) {
@@ -269,7 +281,7 @@ public class Vessel {
 	}
 
 	public Color getColor(double percent) {
-		
+
 		double power = percent / 100;
 
 		double H = power * 0.4; // Hue (note 0.4 = Green, see huge chart below)
@@ -277,7 +289,7 @@ public class Vessel {
 		double B = 0.3; // Brightness
 
 		return Color.getHSBColor((float) H, (float) S, (float) B);
-		
+
 	}
 
 	public void generateImage() {
@@ -312,12 +324,13 @@ public class Vessel {
 			gr.setColor(makeTransparent(Colours.background, 40));
 			gr.setStroke(new BasicStroke(5));
 			gr.draw(result);
-			
-//			for (int i = 0; i < 20000; i++) {
-//				
-//				gr.fillRect(RandomInt.anyRandomIntRange(0, img.getWidth()), RandomInt.anyRandomIntRange(0, img.getHeight()), 1, 1);
-//				
-//			}
+
+			// for (int i = 0; i < 20000; i++) {
+			//
+			// gr.fillRect(RandomInt.anyRandomIntRange(0, img.getWidth()),
+			// RandomInt.anyRandomIntRange(0, img.getHeight()), 1, 1);
+			//
+			// }
 
 			gr.dispose();
 
@@ -380,20 +393,49 @@ public class Vessel {
 		}
 	}
 
+	public void flip() {
+
+		try {
+
+			this.area = ShipBuilderUtils.flipVertically(this.area);
+			generateImage();
+			calculateBounds();
+
+		} catch (Exception ex) {
+
+			// Do Nothing
+
+		}
+	}
+
 	private void countNonAlphaPixels() {
-		
+
 		hull = 0;
 
 		for (int x = 0; x < img.getWidth(); x++) {
-			
+
 			for (int y = 0; y < img.getHeight(); y++) {
 
 				if (img.getRGB(x, y) > 0) {
-					
+
 					hull++;
-					
+
 				}
 			}
 		}
+	}
+
+	public boolean containsPoint(Point2D.Double point) {
+
+		boolean result = false;
+
+		if (bounds.contains(point)) {
+
+			result = true;
+
+		}
+
+		return result;
+
 	}
 }

@@ -5,12 +5,19 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 import ajb.examples.helpers.LookAndFeelUtils;
 import ajb.examples.helpers.ShipBuilderUtils;
@@ -33,11 +40,12 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 	Starfield starfield = null;
 	GameLoop loop = new GameLoop(this);
-	Vessel vessel = null;
+	List<Vessel> vessels = new ArrayList<Vessel>();
 	JFrame frame = null;
 	int windowedWidth = 1024;
 	int windowedHeight = 768;
 	boolean displayHelp = true;
+	Point2D.Double clickPoint = null;
 
 	public ShipBuilderExample() {
 
@@ -95,7 +103,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 		Graphics2D gr = (Graphics2D) g;
 
-		if (vessel != null) {
+		for (Vessel vessel : vessels) {
 
 			vessel.draw(gr);
 
@@ -107,14 +115,21 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 	public void keyPressed(KeyEvent e) {
 
 		try {
+
 			if (e.getKeyCode() == KeyEvent.VK_HOME) {
 
 				moveToShip();
 
 			} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 
-				vessel = new Vessel(ShipBuilderUtils.generate(),
-						new Point2D.Double(this.getWidth() / 2, this.getHeight() / 2));
+				// Vessel vessel = getSelectedVessel();
+				//
+				// if (vessel != null) {
+				//
+				// vessel = new Vessel(ShipBuilderUtils.generate(),
+				// new Point2D.Double(this.getWidth() / 2, this.getHeight() / 2));
+				//
+				// }
 
 			} else if (e.getKeyCode() == KeyEvent.VK_F11) {
 
@@ -161,27 +176,121 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 			} else if (e.getKeyCode() == KeyEvent.VK_A) {
 
-				vessel.add();
+				Vessel vessel = getSelectedVessel();
+
+				if (vessel != null) {
+
+					vessel.add();
+
+				}
 
 			} else if (e.getKeyCode() == KeyEvent.VK_S) {
 
-				vessel.subtract();
+				Vessel vessel = getSelectedVessel();
+
+				if (vessel != null) {
+
+					vessel.subtract();
+
+				}
 
 			} else if (e.getKeyCode() == KeyEvent.VK_D) {
 
-				vessel.addSpine();
+				Vessel vessel = getSelectedVessel();
+
+				if (vessel != null) {
+
+					vessel.addSpine();
+
+				}
+
+			} else if (e.getKeyCode() == KeyEvent.VK_F) {
+
+				Vessel vessel = getSelectedVessel();
+
+				if (vessel != null) {
+
+					vessel.flip();
+
+				}
 
 			}
 
-		} catch (Exception ex) {
-			
+		} catch (
+
+		Exception ex) {
+
 			ex.printStackTrace();
+
+		}
+
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+
+		try {
 			
+			clickPoint = transformPoint(new Point2D.Double(e.getX(), e.getY()));
+			
+		} catch (NoninvertibleTransformException e1) {
+			
+			e1.printStackTrace();
+			
+		}
+		
+		boolean vesselSelected = false;
+		
+		for (Vessel vessel : vessels) {
+
+			if (vessel.containsPoint(clickPoint)) {
+
+				vessel.selected = true;
+				vesselSelected = true;
+
+			} else {
+
+				vessel.selected = false;
+
+			}
+
+		}		
+
+		if (e.getButton() == MouseEvent.BUTTON3) {
+
+			JPopupMenu myPopupMenu = new JPopupMenu();
+			
+			if (!vesselSelected) {
+				
+				JMenuItem newVessel = new JMenuItem(new AbstractAction("New") {
+					public void actionPerformed(ActionEvent ae) {
+						vessels.add(new Vessel(ShipBuilderUtils.generate(), clickPoint));
+					}
+				});
+	
+				myPopupMenu.add(newVessel);
+				
+			} else {
+				
+				JMenuItem nameVessel = new JMenuItem(new AbstractAction("Name") {
+					public void actionPerformed(ActionEvent ae) {
+						
+					}
+				});
+	
+				myPopupMenu.add(nameVessel);				
+				
+			}
+			
+			myPopupMenu.show(this, e.getX(), e.getY());
+
 		}
 
 	}
 
 	private void moveToShip() {
+
+		Vessel vessel = getSelectedVessel();
 
 		if (vessel != null) {
 
@@ -198,6 +307,24 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 			}
 
 		}
+
+	}
+
+	private Vessel getSelectedVessel() {
+
+		Vessel result = null;
+
+		for (Vessel vessel : vessels) {
+
+			if (vessel.selected) {
+
+				result = vessel;
+
+			}
+
+		}
+
+		return result;
 
 	}
 
