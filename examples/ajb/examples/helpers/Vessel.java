@@ -269,6 +269,7 @@ public class Vessel {
 	}
 
 	public Color getColor(double percent) {
+		
 		double power = percent / 100;
 
 		double H = power * 0.4; // Hue (note 0.4 = Green, see huge chart below)
@@ -276,6 +277,7 @@ public class Vessel {
 		double B = 0.3; // Brightness
 
 		return Color.getHSBColor((float) H, (float) S, (float) B);
+		
 	}
 
 	public void generateImage() {
@@ -310,6 +312,12 @@ public class Vessel {
 			gr.setColor(makeTransparent(Colours.background, 40));
 			gr.setStroke(new BasicStroke(5));
 			gr.draw(result);
+			
+//			for (int i = 0; i < 20000; i++) {
+//				
+//				gr.fillRect(RandomInt.anyRandomIntRange(0, img.getWidth()), RandomInt.anyRandomIntRange(0, img.getHeight()), 1, 1);
+//				
+//			}
 
 			gr.dispose();
 
@@ -377,10 +385,13 @@ public class Vessel {
 		hull = 0;
 
 		for (int x = 0; x < img.getWidth(); x++) {
+			
 			for (int y = 0; y < img.getHeight(); y++) {
 
 				if (img.getRGB(x, y) > 0) {
+					
 					hull++;
+					
 				}
 			}
 		}

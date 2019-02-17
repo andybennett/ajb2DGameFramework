@@ -174,7 +174,9 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 			}
 
 		} catch (Exception ex) {
+			
 			ex.printStackTrace();
+			
 		}
 
 	}
