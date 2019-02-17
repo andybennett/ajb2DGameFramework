@@ -2,14 +2,17 @@ package ajb.examples.helpers;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.Map;
 
 public class Vessel {
 
@@ -37,6 +40,8 @@ public class Vessel {
 	Area northWestArmour = null;
 
 	double rotationInDegrees = 0;
+
+	double hull = 0;
 
 	final static float dash1[] = { 10.0f };
 	final static BasicStroke dashed = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1,
@@ -166,7 +171,8 @@ public class Vessel {
 	public void draw(Graphics2D g2d) {
 
 		try {
-			
+
+			g2d.setFont(new Font("Calibri", Font.BOLD, 14));
 			g2d.rotate(Math.toRadians(rotationInDegrees), center.getX(), center.getY());
 
 			// g2d.setStroke(dashed);
@@ -178,6 +184,7 @@ public class Vessel {
 			// g2d.draw(shields.getArea());
 
 			if (img != null) {
+
 				g2d.drawImage(img, null, (int) center.getX() - (img.getWidth() / 2),
 						(int) center.getY() - (img.getHeight() / 2));
 
@@ -211,50 +218,46 @@ public class Vessel {
 				g2d.draw(southWestArmour);
 				g2d.draw(northWestArmour);
 
-				g2d.setColor(Colours.white.darker());
-				String hp = String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100)));
+				g2d.setColor(Colours.green);
+				String hp = String.valueOf(Math.round(hull / 10));
 				int stringWidth = g2d.getFontMetrics().stringWidth(hp);
 				g2d.drawString(hp, (int) center.getX() - (stringWidth / 2),
 						(int) shieldsHex.getSouthWestPoint().getY());
 
-				String armourNorth = String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 2)) + " / "
-						+ String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 3));
+				String armourNorth = String.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
 				stringWidth = g2d.getFontMetrics().stringWidth(armourNorth);
 				g2d.drawString(armourNorth, (int) center.getX() - (stringWidth / 2),
 						(int) shieldsHex.getNorthWestPoint().getY() - 20);
 
-				String armourNorthWest = String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 2))
-						+ " / " + String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 3));
+				String armourNorthWest = String.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
 				stringWidth = g2d.getFontMetrics().stringWidth(armourNorthWest);
 				g2d.drawString(armourNorthWest,
-						(int) (northWestShields.getBounds2D().getCenterX() - 40) - (stringWidth / 2),
+						(int) (northWestShields.getBounds2D().getCenterX() - 50) - (stringWidth / 2),
 						(int) northWestShields.getBounds2D().getCenterY());
 
-				String armourNorthEast = String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 2))
-						+ " / " + String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 3));
+				String armourNorthEast = String.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
 				stringWidth = g2d.getFontMetrics().stringWidth(armourNorthEast);
 				g2d.drawString(armourNorthEast,
-						(int) (northEastShields.getBounds2D().getCenterX() + 40) - (stringWidth / 2),
+						(int) (northEastShields.getBounds2D().getCenterX() + 50) - (stringWidth / 2),
 						(int) northEastShields.getBounds2D().getCenterY());
 
-				String armourSouthWest = String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 2))
-						+ " / " + String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 4));
+				String armourSouthWest = String.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 4)));
 				stringWidth = g2d.getFontMetrics().stringWidth(armourSouthWest);
 				g2d.drawString(armourSouthWest,
-						(int) (southWestShields.getBounds2D().getCenterX() - 40) - (stringWidth / 2),
+						(int) (southWestShields.getBounds2D().getCenterX() - 50) - (stringWidth / 2),
 						(int) southWestShields.getBounds2D().getCenterY());
 
-				String armourSouthEast = String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 2))
-						+ " / " + String.valueOf(Math.round((img.getWidth() * img.getHeight() / 100) / 4));
+				String armourSouthEast = String.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 4)));
 				stringWidth = g2d.getFontMetrics().stringWidth(armourSouthEast);
 				g2d.drawString(armourSouthEast,
-						(int) (southEastShields.getBounds2D().getCenterX() + 40) - (stringWidth / 2),
+						(int) (southEastShields.getBounds2D().getCenterX() + 50) - (stringWidth / 2),
 						(int) southEastShields.getBounds2D().getCenterY());
 			}
+
 		} catch (Exception ex) {
-			
+
 			// Do Nothing
-			
+
 		}
 
 	}
@@ -292,12 +295,27 @@ public class Vessel {
 
 			Graphics2D gr = (Graphics2D) img.getGraphics();
 
+			Map<?, ?> desktopHints = (Map<?, ?>) Toolkit.getDefaultToolkit()
+					.getDesktopProperty("awt.font.desktophints");
+
+			if (desktopHints != null) {
+				gr.setRenderingHints(desktopHints);
+			}
+
 			gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			gr.setColor(Colours.gray);
+
 			gr.fill(result);
+
+			gr.setColor(makeTransparent(Colours.background, 40));
+			gr.setStroke(new BasicStroke(5));
+			gr.draw(result);
+
 			gr.dispose();
 
 			this.img = img;
+
+			countNonAlphaPixels();
 
 		} catch (Exception ex) {
 
@@ -310,47 +328,61 @@ public class Vessel {
 	public void add() {
 
 		try {
-			
+
 			ShipBuilderUtils.add(this.area);
 			generateImage();
 			calculateBounds();
-			
+
 		} catch (Exception ex) {
-			
+
 			// Do Nothing
-			
+
 		}
 
 	}
-	
+
 	public void addSpine() {
 
 		try {
-			
+
 			ShipBuilderUtils.addSpine(this.area);
 			generateImage();
 			calculateBounds();
-			
+
 		} catch (Exception ex) {
-			
+
 			// Do Nothing
-			
+
 		}
 
-	}	
+	}
 
 	public void subtract() {
 
 		try {
-			
+
 			ShipBuilderUtils.subtract(this.area);
 			generateImage();
 			calculateBounds();
-			
+
 		} catch (Exception ex) {
-			
+
 			// Do Nothing
-			
+
+		}
+	}
+
+	private void countNonAlphaPixels() {
+		
+		hull = 0;
+
+		for (int x = 0; x < img.getWidth(); x++) {
+			for (int y = 0; y < img.getHeight(); y++) {
+
+				if (img.getRGB(x, y) > 0) {
+					hull++;
+				}
+			}
 		}
 	}
 }

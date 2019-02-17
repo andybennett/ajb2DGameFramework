@@ -74,16 +74,16 @@ public class ShipBuilderUtils {
 		int type = RandomInt.anyRandomIntRange(1, 2);
 
 		switch (type) {
-		// case 1:
-		// area = halfCircle();
-		// break;
 		case 1:
+			area = halfCircle();
+			break;
+		case 2:
 			area = halfTriangle();
 			break;
-		// case 3:
-		// area = halfCircleAlternative();
-		// break;
-		case 2:
+		case 3:
+			area = halfCircleAlternative();
+			break;
+		case 4:
 			area = halfTriangleAlternative();
 			break;
 		}
@@ -153,9 +153,10 @@ public class ShipBuilderUtils {
 
 	public static void addSpine(Area area) {
 
-		area.add(new Area(new Rectangle2D.Double(area.getBounds2D().getMinX(),
-				RandomInt.anyRandomIntRange((int) area.getBounds2D().getCenterY(), (int) area.getBounds2D().getMinY()) - 20,
-				RandomInt.anyRandomIntRange(1, 10), RandomInt.anyRandomIntRange(1, 20))));
+		area.add(new Area(new Rectangle2D.Double(
+				RandomInt.anyRandomIntRange((int)area.getBounds2D().getMinX(), (int)area.getBounds2D().getMinX() + 5),
+				RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinY() - 5, (int) area.getBounds2D().getMaxY()),
+				RandomInt.anyRandomIntRange(1, 10), RandomInt.anyRandomIntRange(1, 10))));
 
 	}
 

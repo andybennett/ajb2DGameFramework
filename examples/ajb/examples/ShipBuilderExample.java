@@ -172,7 +172,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 				vessel.addSpine();
 
 			}
-			
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -186,8 +186,8 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 			try {
 
 				moveToPoint(transformPoint(
-						new Point2D.Double((vessel.center.getX() - (this.getWidth() / 2) * coordTransform.getScaleX()),
-								(vessel.center.getY() - (this.getHeight() / 2) * coordTransform.getScaleY()))));
+						new Point2D.Double((this.getWidth() / 2) - (vessel.center.getX() * coordTransform.getScaleX()),
+								(this.getHeight() / 2) - (vessel.center.getY() * coordTransform.getScaleY()))));
 
 			} catch (NoninvertibleTransformException e1) {
 
