@@ -71,7 +71,7 @@ public class ShipBuilderUtils {
 
 		Area area = null;
 
-		int type = RandomInt.anyRandomIntRange(1, 2);
+		int type = RandomInt.anyRandomIntRange(1, 4);
 
 		switch (type) {
 		case 1:

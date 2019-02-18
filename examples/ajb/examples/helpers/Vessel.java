@@ -179,20 +179,13 @@ public class Vessel {
 			g2d.setFont(new Font("Calibri", Font.BOLD, 14));
 			g2d.rotate(Math.toRadians(rotationInDegrees), center.getX(), center.getY());
 
-			// g2d.setStroke(dashed);
-
-			// Boundary Hex
-			g2d.setColor(makeTransparent(Colours.background, 200));
-			g2d.fill(boundsHex.getPoly());
-			// g2d.draw(armour.getArea());
-			// g2d.draw(shields.getArea());
-
 			if (img != null) {
 
-				g2d.drawImage(img, null, (int) center.getX() - (img.getWidth() / 2),
-						(int) center.getY() - (img.getHeight() / 2));
-
 				if (selected) {
+
+					// Boundary Hex
+					g2d.setColor(makeTransparent(Colours.background, 200));
+					g2d.fill(boundsHex.getPoly());
 
 					g2d.setColor(getColor(30));
 					g2d.fill(shields);
@@ -264,6 +257,14 @@ public class Vessel {
 							(int) (southEastShields.getBounds2D().getCenterX() + 50) - (stringWidth / 2),
 							(int) southEastShields.getBounds2D().getCenterY());
 				}
+
+				g2d.setColor(makeTransparent(Colours.background, 200));
+				g2d.fillRect((int) center.getX() - (img.getWidth() / 2), (int) center.getY() - (img.getHeight() / 2),
+						img.getWidth(), img.getHeight());
+
+				g2d.drawImage(img, null, (int) center.getX() - (img.getWidth() / 2),
+						(int) center.getY() - (img.getHeight() / 2));
+
 			}
 
 		} catch (Exception ex) {
@@ -337,6 +338,22 @@ public class Vessel {
 			this.img = img;
 
 			countNonAlphaPixels();
+
+		} catch (Exception ex) {
+
+			// Do Nothing
+
+		}
+
+	}
+
+	public void random() {
+
+		try {
+
+			this.area = ShipBuilderUtils.generate();
+			generateImage();
+			calculateBounds();
 
 		} catch (Exception ex) {
 
