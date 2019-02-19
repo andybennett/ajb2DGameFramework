@@ -47,29 +47,9 @@ public class ShipBuilderUtils {
 
 	}
 
-	public static BufferedImage generateImage() {
-
-		Area ship1 = generate();
-
-		GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
-				.getDefaultConfiguration();
-		BufferedImage img = gc.createCompatibleImage((int) ship1.getBounds2D().getMaxX(),
-				(int) ship1.getBounds2D().getMaxY(), BufferedImage.TYPE_INT_ARGB);
-
-		Graphics2D gr = (Graphics2D) img.getGraphics();
-
-		gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		gr.setColor(Colours.gray);
-		gr.fill(ship1);
-		gr.dispose();
-
-		return img;
-
-	}
-
 	public static Area generate() {
 
-		Area area = null;
+		Area area = new Area();
 
 		int type = RandomInt.anyRandomIntRange(1, 4);
 
@@ -87,6 +67,16 @@ public class ShipBuilderUtils {
 			area = halfTriangleAlternative();
 			break;
 		}
+
+//		for (int i = 0; i < RandomInt.anyRandomIntRange(100, 500); i++) {
+//			
+//			int angle = RandomInt.anyRandomIntRange(0, 360);
+//
+//			int x = (int) (area.getBounds2D().getCenterX() + (int) (Math.cos(Math.toRadians(angle)) * RandomInt.anyRandomIntRange(0, 20)));
+//			int y = (int) (area.getBounds2D().getCenterY() + (int) (Math.sin(Math.toRadians(angle)) * RandomInt.anyRandomIntRange(0, 100)));
+//			
+//			area.add(new Area(new Rectangle2D.Double(x, y, RandomInt.anyRandomIntRange(1, 10), RandomInt.anyRandomIntRange(1, 20))));
+//		}
 
 		int count = RandomInt.anyRandomIntRange(20, 100);
 
@@ -154,8 +144,8 @@ public class ShipBuilderUtils {
 	public static void addSpine(Area area) {
 
 		area.add(new Area(new Rectangle2D.Double(
-				RandomInt.anyRandomIntRange((int)area.getBounds2D().getMinX(), (int)area.getBounds2D().getMinX() + 5),
-				RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinY() - 5, (int) area.getBounds2D().getMaxY()),
+				RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinX(), (int) area.getBounds2D().getMinX()),
+				RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinY(), (int) area.getBounds2D().getMaxY()),
 				RandomInt.anyRandomIntRange(1, 10), RandomInt.anyRandomIntRange(1, 10))));
 
 	}

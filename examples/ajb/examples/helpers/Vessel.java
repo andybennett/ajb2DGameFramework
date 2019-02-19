@@ -321,8 +321,10 @@ public class Vessel {
 			gr.setColor(Colours.gray);
 
 			gr.fill(result);
+			
+			
 
-			gr.setColor(makeTransparent(Colours.background, 40));
+			gr.setColor(makeTransparent(Colours.background, 60));
 			gr.setStroke(new BasicStroke(5));
 			gr.draw(result);
 
