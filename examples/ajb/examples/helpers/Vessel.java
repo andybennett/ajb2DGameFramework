@@ -4,15 +4,10 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
 import java.awt.Polygon;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.Map;
 
 public class Vessel {
 
@@ -184,23 +179,23 @@ public class Vessel {
 				if (selected) {
 
 					// Boundary Hex
-					g2d.setColor(makeTransparent(Colours.background, 200));
+					g2d.setColor(Colours.makeTransparent(Colours.background, 200));
 					g2d.fill(boundsHex.getPoly());
 
-					g2d.setColor(getColor(30));
+					g2d.setColor(Colours.getColor(30));
 					g2d.fill(shields);
 
-					g2d.setColor(getColor(100));
+					g2d.setColor(Colours.getColor(100));
 					g2d.fill(northArmour);
-					g2d.setColor(getColor(100));
+					g2d.setColor(Colours.getColor(100));
 					g2d.fill(northEastArmour);
-					g2d.setColor(getColor(100));
+					g2d.setColor(Colours.getColor(100));
 					g2d.fill(southEastArmour);
 					// g2d.setColor(getColor(100));
 					// g2d.fill(southArmour);
-					g2d.setColor(getColor(100));
+					g2d.setColor(Colours.getColor(100));
 					g2d.fill(southWestArmour);
-					g2d.setColor(getColor(100));
+					g2d.setColor(Colours.getColor(100));
 					g2d.fill(northWestArmour);
 
 					g2d.setColor(Color.BLACK);
@@ -258,7 +253,7 @@ public class Vessel {
 							(int) southEastShields.getBounds2D().getCenterY());
 				}
 
-				g2d.setColor(makeTransparent(Colours.background, 200));
+				g2d.setColor(Colours.makeTransparent(Colours.background, 200));
 				g2d.fillRect((int) center.getX() - (img.getWidth() / 2), (int) center.getY() - (img.getHeight() / 2),
 						img.getWidth(), img.getHeight());
 
@@ -269,27 +264,9 @@ public class Vessel {
 
 		} catch (Exception ex) {
 
-			// Do Nothing
+			ex.printStackTrace();
 
 		}
-
-	}
-
-	public static Color makeTransparent(Color source, int alpha) {
-
-		return new Color(source.getRed(), source.getGreen(), source.getBlue(), alpha);
-
-	}
-
-	public Color getColor(double percent) {
-
-		double power = percent / 100;
-
-		double H = power * 0.4; // Hue (note 0.4 = Green, see huge chart below)
-		double S = 0.3; // Saturation
-		double B = 0.3; // Brightness
-
-		return Color.getHSBColor((float) H, (float) S, (float) B);
 
 	}
 
@@ -297,53 +274,44 @@ public class Vessel {
 
 		try {
 
+			// Copy the area.
 			Area result = new Area(area);
 
-			// Mirror horizontally
-			result.add(ShipBuilderUtils.mirrorAlongX((int) result.getBounds2D().getMinX(), result));
-			result = ShipBuilderUtils.translateToTopLeft(result);
+			// Mirror horizontally.
+			result.add(AreaUtils.mirrorAlongX((int) result.getBounds2D().getMinX(), result));
+			
+			// Translate to top left.
+			result = AreaUtils.translateToTopLeft(result);
 
-			GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
-					.getDefaultConfiguration();
-			BufferedImage img = gc.createCompatibleImage((int) result.getBounds2D().getMaxX(),
-					(int) result.getBounds2D().getMaxY(), BufferedImage.TYPE_INT_ARGB);
+			// Create image.
+			BufferedImage img = ImageUtils.create(result.getBounds2D().getMaxX(), result.getBounds2D().getMaxY());
 
+			// Get the graphics from the image to write to.
 			Graphics2D gr = (Graphics2D) img.getGraphics();
 
-			Map<?, ?> desktopHints = (Map<?, ?>) Toolkit.getDefaultToolkit()
-					.getDesktopProperty("awt.font.desktophints");
-
-			if (desktopHints != null) {
-				gr.setRenderingHints(desktopHints);
-			}
-
-			gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			// Set colour.
 			gr.setColor(Colours.gray);
 
+			// Draw.
 			gr.fill(result);
-			
-			
 
-			gr.setColor(makeTransparent(Colours.background, 60));
+			// Draw Lines.
+			gr.setColor(Colours.makeTransparent(Colours.background, 60));
 			gr.setStroke(new BasicStroke(5));
 			gr.draw(result);
 
-			// for (int i = 0; i < 20000; i++) {
-			//
-			// gr.fillRect(RandomInt.anyRandomIntRange(0, img.getWidth()),
-			// RandomInt.anyRandomIntRange(0, img.getHeight()), 1, 1);
-			//
-			// }
-
+			// Dispose the graphics.
 			gr.dispose();
 
+			// Set the image.
 			this.img = img;
 
-			countNonAlphaPixels();
+			// Set the hull count.
+			hull = ImageUtils.countNonAlphaPixels(img);
 
 		} catch (Exception ex) {
 
-			// Do Nothing
+			ex.printStackTrace();
 
 		}
 
@@ -353,13 +321,13 @@ public class Vessel {
 
 		try {
 
-			this.area = ShipBuilderUtils.generate();
+			this.area = VesselUtils.generate();
 			generateImage();
 			calculateBounds();
 
 		} catch (Exception ex) {
 
-			// Do Nothing
+			ex.printStackTrace();
 
 		}
 
@@ -369,13 +337,13 @@ public class Vessel {
 
 		try {
 
-			ShipBuilderUtils.add(this.area);
+			AreaUtils.addRandomBlock(this.area);
 			generateImage();
 			calculateBounds();
 
 		} catch (Exception ex) {
 
-			// Do Nothing
+			ex.printStackTrace();
 
 		}
 
@@ -385,13 +353,13 @@ public class Vessel {
 
 		try {
 
-			ShipBuilderUtils.addSpine(this.area);
+			AreaUtils.addRandomBlockAlongMinX(this.area);
 			generateImage();
 			calculateBounds();
 
 		} catch (Exception ex) {
 
-			// Do Nothing
+			ex.printStackTrace();
 
 		}
 
@@ -401,13 +369,13 @@ public class Vessel {
 
 		try {
 
-			ShipBuilderUtils.subtract(this.area);
+			AreaUtils.subtractRandomBlock(this.area);
 			generateImage();
 			calculateBounds();
 
 		} catch (Exception ex) {
 
-			// Do Nothing
+			ex.printStackTrace();
 
 		}
 	}
@@ -416,31 +384,14 @@ public class Vessel {
 
 		try {
 
-			this.area = ShipBuilderUtils.flipVertically(this.area);
+			this.area = AreaUtils.flipVertically(this.area);
 			generateImage();
 			calculateBounds();
 
 		} catch (Exception ex) {
 
-			// Do Nothing
+			ex.printStackTrace();
 
-		}
-	}
-
-	private void countNonAlphaPixels() {
-
-		hull = 0;
-
-		for (int x = 0; x < img.getWidth(); x++) {
-
-			for (int y = 0; y < img.getHeight(); y++) {
-
-				if (img.getRGB(x, y) > 0) {
-
-					hull++;
-
-				}
-			}
 		}
 	}
 
