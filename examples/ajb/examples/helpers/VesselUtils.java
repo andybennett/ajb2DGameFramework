@@ -48,7 +48,7 @@ public class VesselUtils {
 
 		Area result = AreaUtils.randomTriangularShape();
 
-		int count = RandomInt.anyRandomIntRange(5, (int) result.getBounds2D().getMaxY() / 2);
+		int count = RandomInt.anyRandomIntRange(5, (int) result.getBounds2D().getMaxY());
 
 		for (int i = 0; i < count; i++) {
 

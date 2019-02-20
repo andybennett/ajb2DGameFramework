@@ -20,11 +20,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
 
 import ajb.examples.helpers.LookAndFeelUtils;
-import ajb.examples.helpers.ShipBuilderUtils;
 import ajb.examples.helpers.Starfield;
 import ajb.examples.helpers.Vessel;
+import ajb.examples.helpers.VesselUtils;
 import ajb.framework.Base2DFramework;
 import ajb.game.GameLoop;
 import ajb.interfaces.Loop;
@@ -49,6 +50,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 	int windowedHeight = 768;
 	boolean displayHelp = true;
 	Point2D.Double clickPoint = null;
+	int scale = 1;
 
 	public ShipBuilderExample() {
 
@@ -229,7 +231,21 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseDragged(MouseEvent e) {
+
+		if (SwingUtilities.isMiddleMouseButton(e)) {
+
+			moveCamera(e);
+
+		}
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+
+		dragStartScreen = new Point2D.Double(e.getPoint().getX(), e.getPoint().getY());
+		dragEndScreen = null;
 
 		try {
 
@@ -241,45 +257,47 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 		}
 
-		boolean vesselSelected = false;
+		selectedVessel = null;
 
-		for (Vessel vessel : vessels) {
+		if (e.getButton() == MouseEvent.BUTTON1 || e.getButton() == MouseEvent.BUTTON3) {
 
-			if (vessel.containsPoint(clickPoint)) {
+			for (Vessel vessel : vessels) {
 
-				vessel.selected = true;
-				vesselSelected = true;
-				selectedVessel = vessel;
+				if (vessel.containsPoint(clickPoint)) {
 
-			} else {
+					vessel.selected = true;
+					selectedVessel = vessel;
 
-				vessel.selected = false;
+				} else {
+
+					vessel.selected = false;
+
+				}
 
 			}
 
-		}
-		
-		if (selectedVessel != null) {
-			
-			vessels.remove(selectedVessel);
-			vessels.add(selectedVessel);			
-			
+			if (selectedVessel != null) {
+
+				vessels.remove(selectedVessel);
+				vessels.add(selectedVessel);
+
+			}
 		}
 
 		if (e.getButton() == MouseEvent.BUTTON3) {
 
 			JPopupMenu myPopupMenu = new JPopupMenu();
 
-			if (!vesselSelected) {
+			if (selectedVessel == null) {
 
 				JMenuItem newVessel = new JMenuItem(new AbstractAction("New") {
 					public void actionPerformed(ActionEvent ae) {
-						
-						Vessel vessel = new Vessel(ShipBuilderUtils.generate(), clickPoint);
+
+						Vessel vessel = new Vessel(VesselUtils.generate(), clickPoint);
 						vessel.selected = true;
 						selectedVessel = vessel;
 						vessels.add(vessel);
-						
+
 					}
 				});
 
@@ -292,37 +310,18 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 				JMenuItem randomName = new JMenuItem("Random");
 				nameSubMenu.add(assignName);
 				nameSubMenu.add(randomName);
-				
+
 				myPopupMenu.add(nameSubMenu);
 
 				JSeparator separator = new JSeparator();
 				myPopupMenu.add(separator);
-				
-				JMenu hullAllocationSubMenu = new JMenu("Hull Allocation");
-				JMenu shields = new JMenu("Shields");
-				JMenuItem ten = new JMenuItem("10%");
-				JMenuItem twenty = new JMenuItem("20%");
-				JMenuItem thirty = new JMenuItem("30%");
-				shields.add(ten);
-				shields.add(twenty);
-				shields.add(thirty);
-				JMenu armour = new JMenu("Armour");
-				JMenu engines = new JMenu("Engines");
-				hullAllocationSubMenu.add(shields);
-				hullAllocationSubMenu.add(armour);
-				hullAllocationSubMenu.add(engines);
-				
-				myPopupMenu.add(hullAllocationSubMenu);
-
-				JSeparator separator1 = new JSeparator();
-				myPopupMenu.add(separator1);				
 
 				JMenuItem deleteVessel = new JMenuItem(new AbstractAction("Delete") {
 					public void actionPerformed(ActionEvent ae) {
-						
+
 						vessels.remove(selectedVessel);
 						selectedVessel = null;
-						
+
 					}
 				});
 

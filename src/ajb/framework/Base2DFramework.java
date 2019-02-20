@@ -13,16 +13,19 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.util.Map;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 @SuppressWarnings("serial")
 public class Base2DFramework extends JPanel
-		implements MouseListener, MouseMotionListener, KeyListener, ComponentListener {
+		implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener, ComponentListener {
 
 	private Color background = Color.decode("#1E1E1E");
 
@@ -36,6 +39,7 @@ public class Base2DFramework extends JPanel
 
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		addMouseWheelListener(this);
 
 	}
 
@@ -180,26 +184,22 @@ public class Base2DFramework extends JPanel
 
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void componentResized(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void componentShown(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+	}
 
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent arg0) {
 	}
 
 }

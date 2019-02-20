@@ -87,9 +87,9 @@ public class AreaUtils {
 
 		Point2D.Double point = AreaUtils.findRandomPointWithinArea(area);
 
-		area.add(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(-1, 5),
-				point.y + RandomInt.anyRandomIntRange(-1, 5), RandomInt.anyRandomIntRange(2, 6),
-				RandomInt.anyRandomIntRange(6, 10))));
+		area.add(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(-5, 5),
+				point.y + RandomInt.anyRandomIntRange(-5, 5), RandomInt.anyRandomIntRange(1, 10),
+				RandomInt.anyRandomIntRange(1, 20))));
 
 	}
 
@@ -97,8 +97,8 @@ public class AreaUtils {
 
 		area.add(new Area(new Rectangle2D.Double(
 				RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinX(), (int) area.getBounds2D().getMinX()),
-				RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinY(), (int) area.getBounds2D().getCenterY()),
-				RandomInt.anyRandomIntRange(2, 6), RandomInt.anyRandomIntRange(6, 10))));
+				RandomInt.anyRandomIntRange((int) area.getBounds2D().getMinY(), (int) area.getBounds2D().getMaxY()),
+				RandomInt.anyRandomIntRange(1, 10), RandomInt.anyRandomIntRange(2, 10))));
 
 	}
 
@@ -134,8 +134,8 @@ public class AreaUtils {
 		Point2D.Double point = AreaUtils.findRandomPointWithinArea(area);
 
 		area.subtract(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(-5, 5),
-				point.y + RandomInt.anyRandomIntRange(-5, 5), RandomInt.anyRandomIntRange(1, 6),
-				RandomInt.anyRandomIntRange(1, 10))));
+				point.y + RandomInt.anyRandomIntRange(-5, 5), RandomInt.anyRandomIntRange(1, 10),
+				RandomInt.anyRandomIntRange(1, 20))));
 
 	}
 

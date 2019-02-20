@@ -1,7 +1,6 @@
 package ajb.examples.helpers;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
@@ -181,76 +180,80 @@ public class Vessel {
 					// Boundary Hex
 					g2d.setColor(Colours.makeTransparent(Colours.background, 200));
 					g2d.fill(boundsHex.getPoly());
+					
+					g2d.setColor(Colours.gray.darker());
+					g2d.setStroke(new BasicStroke(2));
+					g2d.draw(boundsHex.getPoly());
 
-					g2d.setColor(Colours.getColor(30));
-					g2d.fill(shields);
-
-					g2d.setColor(Colours.getColor(100));
-					g2d.fill(northArmour);
-					g2d.setColor(Colours.getColor(100));
-					g2d.fill(northEastArmour);
-					g2d.setColor(Colours.getColor(100));
-					g2d.fill(southEastArmour);
-					// g2d.setColor(getColor(100));
-					// g2d.fill(southArmour);
-					g2d.setColor(Colours.getColor(100));
-					g2d.fill(southWestArmour);
-					g2d.setColor(Colours.getColor(100));
-					g2d.fill(northWestArmour);
-
-					g2d.setColor(Color.BLACK);
-					g2d.draw(northShields);
-					g2d.draw(northEastShields);
-					g2d.draw(southEastShields);
-					// g2d.draw(southShields);
-					g2d.draw(southWestShields);
-					g2d.draw(northWestShields);
-					g2d.draw(northArmour);
-					g2d.draw(northEastArmour);
-					g2d.draw(southEastArmour);
-					// g2d.draw(southArmour);
-					g2d.draw(southWestArmour);
-					g2d.draw(northWestArmour);
-
-					g2d.setColor(Colours.green);
-					String hp = String.valueOf(Math.round(hull / 10));
-					int stringWidth = g2d.getFontMetrics().stringWidth(hp);
-					g2d.drawString(hp, (int) center.getX() - (stringWidth / 2),
-							(int) shieldsHex.getSouthWestPoint().getY());
-
-					String armourNorth = String
-							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
-					stringWidth = g2d.getFontMetrics().stringWidth(armourNorth);
-					g2d.drawString(armourNorth, (int) center.getX() - (stringWidth / 2),
-							(int) shieldsHex.getNorthWestPoint().getY() - 20);
-
-					String armourNorthWest = String
-							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
-					stringWidth = g2d.getFontMetrics().stringWidth(armourNorthWest);
-					g2d.drawString(armourNorthWest,
-							(int) (northWestShields.getBounds2D().getCenterX() - 50) - (stringWidth / 2),
-							(int) northWestShields.getBounds2D().getCenterY());
-
-					String armourNorthEast = String
-							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
-					stringWidth = g2d.getFontMetrics().stringWidth(armourNorthEast);
-					g2d.drawString(armourNorthEast,
-							(int) (northEastShields.getBounds2D().getCenterX() + 50) - (stringWidth / 2),
-							(int) northEastShields.getBounds2D().getCenterY());
-
-					String armourSouthWest = String
-							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 4)));
-					stringWidth = g2d.getFontMetrics().stringWidth(armourSouthWest);
-					g2d.drawString(armourSouthWest,
-							(int) (southWestShields.getBounds2D().getCenterX() - 50) - (stringWidth / 2),
-							(int) southWestShields.getBounds2D().getCenterY());
-
-					String armourSouthEast = String
-							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 4)));
-					stringWidth = g2d.getFontMetrics().stringWidth(armourSouthEast);
-					g2d.drawString(armourSouthEast,
-							(int) (southEastShields.getBounds2D().getCenterX() + 50) - (stringWidth / 2),
-							(int) southEastShields.getBounds2D().getCenterY());
+//					g2d.setColor(Colours.getColor(30));
+//					g2d.fill(shields);
+//
+//					g2d.setColor(Colours.getColor(100));
+//					g2d.fill(northArmour);
+//					g2d.setColor(Colours.getColor(100));
+//					g2d.fill(northEastArmour);
+//					g2d.setColor(Colours.getColor(100));
+//					g2d.fill(southEastArmour);
+//					// g2d.setColor(getColor(100));
+//					// g2d.fill(southArmour);
+//					g2d.setColor(Colours.getColor(100));
+//					g2d.fill(southWestArmour);
+//					g2d.setColor(Colours.getColor(100));
+//					g2d.fill(northWestArmour);
+//
+//					g2d.setColor(Color.BLACK);
+//					g2d.draw(northShields);
+//					g2d.draw(northEastShields);
+//					g2d.draw(southEastShields);
+//					// g2d.draw(southShields);
+//					g2d.draw(southWestShields);
+//					g2d.draw(northWestShields);
+//					g2d.draw(northArmour);
+//					g2d.draw(northEastArmour);
+//					g2d.draw(southEastArmour);
+//					// g2d.draw(southArmour);
+//					g2d.draw(southWestArmour);
+//					g2d.draw(northWestArmour);
+//
+//					g2d.setColor(Colours.green);
+//					String hp = String.valueOf(Math.round(hull / 10));
+//					int stringWidth = g2d.getFontMetrics().stringWidth(hp);
+//					g2d.drawString(hp, (int) center.getX() - (stringWidth / 2),
+//							(int) shieldsHex.getSouthWestPoint().getY());
+//
+//					String armourNorth = String
+//							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
+//					stringWidth = g2d.getFontMetrics().stringWidth(armourNorth);
+//					g2d.drawString(armourNorth, (int) center.getX() - (stringWidth / 2),
+//							(int) shieldsHex.getNorthWestPoint().getY() - 20);
+//
+//					String armourNorthWest = String
+//							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
+//					stringWidth = g2d.getFontMetrics().stringWidth(armourNorthWest);
+//					g2d.drawString(armourNorthWest,
+//							(int) (northWestShields.getBounds2D().getCenterX() - 50) - (stringWidth / 2),
+//							(int) northWestShields.getBounds2D().getCenterY());
+//
+//					String armourNorthEast = String
+//							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 3)));
+//					stringWidth = g2d.getFontMetrics().stringWidth(armourNorthEast);
+//					g2d.drawString(armourNorthEast,
+//							(int) (northEastShields.getBounds2D().getCenterX() + 50) - (stringWidth / 2),
+//							(int) northEastShields.getBounds2D().getCenterY());
+//
+//					String armourSouthWest = String
+//							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 4)));
+//					stringWidth = g2d.getFontMetrics().stringWidth(armourSouthWest);
+//					g2d.drawString(armourSouthWest,
+//							(int) (southWestShields.getBounds2D().getCenterX() - 50) - (stringWidth / 2),
+//							(int) southWestShields.getBounds2D().getCenterY());
+//
+//					String armourSouthEast = String
+//							.valueOf(Math.round((hull / 10) / 2) + " / " + String.valueOf(Math.round((hull / 10) / 4)));
+//					stringWidth = g2d.getFontMetrics().stringWidth(armourSouthEast);
+//					g2d.drawString(armourSouthEast,
+//							(int) (southEastShields.getBounds2D().getCenterX() + 50) - (stringWidth / 2),
+//							(int) southEastShields.getBounds2D().getCenterY());
 				}
 
 				g2d.setColor(Colours.makeTransparent(Colours.background, 200));
