@@ -35,7 +35,7 @@ public class AreaUtils {
 
 		Area area = new Area();
 
-		for (int i = 0; i < RandomInt.anyRandomIntRange(100, 400); i++) {
+		for (int i = 0; i < RandomInt.anyRandomIntRange(100, 200); i++) {
 
 			int angle = RandomInt.anyRandomIntRange(0, 360);
 
@@ -58,7 +58,7 @@ public class AreaUtils {
 
 		area.add(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(-5, 5),
 				point.y + RandomInt.anyRandomIntRange(-5, 5), RandomInt.anyRandomIntRange(1, 10),
-				RandomInt.anyRandomIntRange(1, 20))));
+				RandomInt.anyRandomIntRange(1, 40))));
 
 	}
 
@@ -115,6 +115,25 @@ public class AreaUtils {
 		area.subtract(new Area(new Ellipse2D.Double(point.x, point.y, RandomInt.anyRandomIntRange(1, 6),
 				RandomInt.anyRandomIntRange(1, 6))));
 
+	}
+
+	public static void subtractRandomLine(Area area) {
+
+		Point2D.Double point = AreaUtils.findRandomPointWithinArea(area);
+
+		int vertical = RandomInt.anyRandomIntRange(0, 4);
+
+		if (vertical < 3) {
+
+			area.subtract(new Area(new Rectangle2D.Double(point.x, point.y, RandomInt.anyRandomIntRange(1, 1),
+					RandomInt.anyRandomIntRange(1, 20))));
+
+		} else {
+
+			area.subtract(new Area(new Rectangle2D.Double(point.x, point.y, RandomInt.anyRandomIntRange(1, 20),
+					RandomInt.anyRandomIntRange(1, 1))));
+
+		}
 	}
 
 	public static Point2D.Double findRandomPointWithinArea(Area area) {

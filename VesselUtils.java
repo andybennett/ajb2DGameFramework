@@ -1,6 +1,5 @@
 package ajb.examples.helpers;
 
-import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
@@ -35,10 +34,6 @@ public class VesselUtils {
 			gr.setColor(Colours.gray);
 
 			gr.fill(result);
-
-			gr.setColor(Colours.makeTransparent(Colours.background, 60));
-			gr.setStroke(new BasicStroke(5));
-			gr.draw(result);
 
 			gr.dispose();
 
@@ -88,6 +83,14 @@ public class VesselUtils {
 			}
 
 		}
+		
+		count = RandomInt.anyRandomIntRange(20, 100);
+
+		for (int i = 0; i < count; i++) {
+
+			AreaUtils.subtractRandomLine(result);
+
+		}		
 
 		return result;
 
