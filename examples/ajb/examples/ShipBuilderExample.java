@@ -11,6 +11,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -204,7 +206,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 				if (vessel != null) {
 
-					vessel.addSpine();
+					vessel.subtractRandomLine();
 
 				}
 
@@ -247,19 +249,19 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 		dragStartScreen = new Point2D.Double(e.getPoint().getX(), e.getPoint().getY());
 		dragEndScreen = null;
 
-		try {
-
-			clickPoint = transformPoint(new Point2D.Double(e.getX(), e.getY()));
-
-		} catch (NoninvertibleTransformException e1) {
-
-			e1.printStackTrace();
-
-		}
-
-		selectedVessel = null;
-
 		if (e.getButton() == MouseEvent.BUTTON1 || e.getButton() == MouseEvent.BUTTON3) {
+
+			selectedVessel = null;
+
+			try {
+
+				clickPoint = transformPoint(new Point2D.Double(e.getX(), e.getY()));
+
+			} catch (NoninvertibleTransformException e1) {
+
+				e1.printStackTrace();
+
+			}
 
 			for (Vessel vessel : vessels) {
 
@@ -299,9 +301,31 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 						vessels.add(vessel);
 
 					}
-				});
+				});				
 
 				myPopupMenu.add(newVessel);
+				
+				JMenuItem load = new JMenuItem(new AbstractAction("Load") {
+					public void actionPerformed(ActionEvent ae) {
+
+						try {
+							
+							FileInputStream fis = new FileInputStream("test.dat");
+							ObjectInputStream iis = new ObjectInputStream(fis);
+							Vessel vessel = (Vessel) iis.readObject();
+							vessels.add(vessel);
+							iis.close();
+							
+						} catch (Exception ex) {
+
+							ex.printStackTrace();
+
+						}
+
+					}
+				});
+				
+				myPopupMenu.add(load);				
 
 			} else {
 
@@ -313,8 +337,20 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 				myPopupMenu.add(nameSubMenu);
 
-				JSeparator separator = new JSeparator();
-				myPopupMenu.add(separator);
+				JSeparator separator1 = new JSeparator();
+				myPopupMenu.add(separator1);
+
+				JMenuItem save = new JMenuItem(new AbstractAction("Save") {
+					public void actionPerformed(ActionEvent ae) {
+
+						selectedVessel.save();
+
+					}
+				});
+				myPopupMenu.add(save);
+
+				JSeparator separator2 = new JSeparator();
+				myPopupMenu.add(separator2);
 
 				JMenuItem deleteVessel = new JMenuItem(new AbstractAction("Delete") {
 					public void actionPerformed(ActionEvent ae) {

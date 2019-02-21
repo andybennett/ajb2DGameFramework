@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="examples"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ajbRandom"/>
+	<classpathentry kind="lib" path="C:/Users/andyj/git/ajb2DGameFramework/lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

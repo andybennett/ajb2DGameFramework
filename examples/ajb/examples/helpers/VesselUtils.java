@@ -3,6 +3,7 @@ package ajb.examples.helpers;
 import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import ajb.random.RandomInt;
@@ -54,12 +55,20 @@ public class VesselUtils {
 			Area segment = createSegment();
 			segment = AreaUtils.translateToPoint(segment,
 					new Point2D.Double(
-							RandomInt.anyRandomIntRange(0, (int) 10),
+							RandomInt.anyRandomIntRange(0, 0),
 							RandomInt.anyRandomIntRange((int) result.getBounds2D().getCenterY(),
 									(int) result.getBounds2D().getCenterY() + 40)));
 			result.add(segment);
 
 		}
+//		
+//		count = RandomInt.anyRandomIntRange(100, 300);
+//
+//		for (int i = 0; i < count; i++) {
+//
+//			AreaUtils.subtractRandomLine(result);
+//
+//		}		
 
 		return result;
 
@@ -67,7 +76,7 @@ public class VesselUtils {
 
 	public static Area createSegment() {
 
-		Area result = AreaUtils.randomBlocks();
+		Area result = new Area(new Rectangle2D.Double(0, 0, 20, 100));
 
 		int count = RandomInt.anyRandomIntRange(100, 500);
 
@@ -81,14 +90,6 @@ public class VesselUtils {
 
 				AreaUtils.subtractRandomBlock(result);
 			}
-
-		}
-		
-		count = RandomInt.anyRandomIntRange(20, 100);
-
-		for (int i = 0; i < count; i++) {
-
-			AreaUtils.subtractRandomLine(result);
 
 		}		
 
