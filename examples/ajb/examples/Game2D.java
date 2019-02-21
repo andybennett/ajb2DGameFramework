@@ -4,11 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.UnsupportedLookAndFeelException;
 
-import ajb.examples.helpers.Colours;
 import ajb.examples.helpers.LookAndFeelUtils;
 import ajb.framework.Base2DFramework;
 import ajb.game.GameLoop;

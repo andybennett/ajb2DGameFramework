@@ -7,7 +7,6 @@ import javax.swing.WindowConstants;
 
 import ajb.examples.helpers.LookAndFeelUtils;
 
-@SuppressWarnings("serial")
 public class SwingExample {
 
     @SuppressWarnings("unused")
