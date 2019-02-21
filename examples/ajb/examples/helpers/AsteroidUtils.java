@@ -1,6 +1,5 @@
 package ajb.examples.helpers;
 
-import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
@@ -27,13 +26,12 @@ public class AsteroidUtils {
 
 			Graphics2D gr = (Graphics2D) img.getGraphics();
 
+			gr.setColor(Colours.background);
+			gr.fillRect(0, 0, img.getWidth(), img.getHeight());			
+			
 			gr.setColor(Colours.gray);
 
 			gr.fill(result);
-
-			gr.setColor(Colours.makeTransparent(Colours.background, 60));
-			gr.setStroke(new BasicStroke(2));
-			gr.draw(result);
 
 			gr.dispose();
 

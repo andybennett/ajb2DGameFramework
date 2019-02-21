@@ -1,8 +1,8 @@
 package ajb.examples.helpers;
 
-import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.geom.Area;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 import ajb.random.RandomInt;
@@ -28,13 +28,12 @@ public class VesselUtils {
 
 			Graphics2D gr = (Graphics2D) img.getGraphics();
 
+			gr.setColor(Colours.background);
+			gr.fillRect(0, 0, img.getWidth(), img.getHeight());
+			
 			gr.setColor(Colours.gray);
 
 			gr.fill(result);
-
-			gr.setColor(Colours.makeTransparent(Colours.background, 60));
-			gr.setStroke(new BasicStroke(5));
-			gr.draw(result);
 
 			gr.dispose();
 
@@ -46,13 +45,35 @@ public class VesselUtils {
 
 	public static Area generate() {
 
-		Area result = AreaUtils.randomTriangularShape();
+		Area result = createSegment();
 
-		int count = RandomInt.anyRandomIntRange(5, (int) result.getBounds2D().getMaxY());
+		int count = RandomInt.anyRandomIntRange(0, 4);
 
 		for (int i = 0; i < count; i++) {
 
-			if (RandomInt.anyRandomIntRange(0, 1) == 1) {
+			Area segment = createSegment();
+			segment = AreaUtils.translateToPoint(segment,
+					new Point2D.Double(
+							RandomInt.anyRandomIntRange(0, (int) 10),
+							RandomInt.anyRandomIntRange((int) result.getBounds2D().getCenterY(),
+									(int) result.getBounds2D().getCenterY() + 40)));
+			result.add(segment);
+
+		}
+
+		return result;
+
+	}
+
+	public static Area createSegment() {
+
+		Area result = AreaUtils.randomBlocks();
+
+		int count = RandomInt.anyRandomIntRange(100, 500);
+
+		for (int i = 0; i < count; i++) {
+
+			if (RandomInt.anyRandomIntRange(0, 5) >= 1) {
 
 				AreaUtils.addRandomBlock(result);
 
@@ -62,6 +83,14 @@ public class VesselUtils {
 			}
 
 		}
+		
+		count = RandomInt.anyRandomIntRange(20, 100);
+
+		for (int i = 0; i < count; i++) {
+
+			AreaUtils.subtractRandomLine(result);
+
+		}		
 
 		return result;
 

@@ -1,6 +1,5 @@
 package ajb.examples.helpers;
 
-import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
@@ -36,50 +35,20 @@ public class AreaUtils {
 
 		Area area = new Area();
 
-		for (int i = 0; i < RandomInt.anyRandomIntRange(100, 400); i++) {
+		for (int i = 0; i < RandomInt.anyRandomIntRange(100, 200); i++) {
 
 			int angle = RandomInt.anyRandomIntRange(0, 360);
 
 			int x = (int) (area.getBounds2D().getCenterX()
-					+ (int) (Math.cos(Math.toRadians(angle)) * RandomInt.anyRandomIntRange(0, 20)));
+					+ (int) (Math.cos(Math.toRadians(angle)) * RandomInt.anyRandomIntRange(0, 10)));
 			int y = (int) (area.getBounds2D().getCenterY()
-					+ (int) (Math.sin(Math.toRadians(angle)) * RandomInt.anyRandomIntRange(0, 20)));
+					+ (int) (Math.sin(Math.toRadians(angle)) * RandomInt.anyRandomIntRange(0, 10)));
 
-			area.add(new Area(new Rectangle2D.Double(x, y, RandomInt.anyRandomIntRange(2, 6),
-					RandomInt.anyRandomIntRange(6, 10))));
+			area.add(new Area(new Rectangle2D.Double(x, y, RandomInt.anyRandomIntRange(1, 10),
+					RandomInt.anyRandomIntRange(1, 20))));
 		}
 
 		return area;
-
-	}
-
-	public static Area randomTriangularShape() {
-
-		int points = RandomInt.anyRandomIntRange(5, 10);
-
-		int[] xpoints = new int[points];
-		int[] ypoints = new int[points];
-
-		int x = 0;
-		int y = 0;
-
-		xpoints[0] = x;
-		ypoints[0] = y;
-
-		for (int i = 1; i < points - 1; i++) {
-
-			x += RandomInt.anyRandomIntRange(0, 10);
-			y += RandomInt.anyRandomIntRange(5, 20);
-			
-			xpoints[i] = x;
-			ypoints[i] = y;			
-
-		}
-
-		xpoints[points - 1] = 0;
-		ypoints[points - 1] = y;
-
-		return new Area(new Polygon(xpoints, ypoints, points));
 
 	}
 
@@ -89,7 +58,7 @@ public class AreaUtils {
 
 		area.add(new Area(new Rectangle2D.Double(point.x + RandomInt.anyRandomIntRange(-5, 5),
 				point.y + RandomInt.anyRandomIntRange(-5, 5), RandomInt.anyRandomIntRange(1, 10),
-				RandomInt.anyRandomIntRange(1, 20))));
+				RandomInt.anyRandomIntRange(1, 40))));
 
 	}
 
@@ -146,6 +115,25 @@ public class AreaUtils {
 		area.subtract(new Area(new Ellipse2D.Double(point.x, point.y, RandomInt.anyRandomIntRange(1, 6),
 				RandomInt.anyRandomIntRange(1, 6))));
 
+	}
+
+	public static void subtractRandomLine(Area area) {
+
+		Point2D.Double point = AreaUtils.findRandomPointWithinArea(area);
+
+		int vertical = RandomInt.anyRandomIntRange(0, 4);
+
+		if (vertical < 3) {
+
+			area.subtract(new Area(new Rectangle2D.Double(point.x, point.y, RandomInt.anyRandomIntRange(1, 1),
+					RandomInt.anyRandomIntRange(1, 20))));
+
+		} else {
+
+			area.subtract(new Area(new Rectangle2D.Double(point.x, point.y, RandomInt.anyRandomIntRange(1, 20),
+					RandomInt.anyRandomIntRange(1, 1))));
+
+		}
 	}
 
 	public static Point2D.Double findRandomPointWithinArea(Area area) {
