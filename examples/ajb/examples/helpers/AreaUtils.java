@@ -21,12 +21,12 @@ public class AreaUtils {
 			int angle = RandomInt.anyRandomIntRange(0, 360);
 
 			int x = (int) (area.getBounds2D().getCenterX()
-					+ (int) (Math.cos(Math.toRadians(angle)) * RandomInt.anyRandomIntRange(0, 30)));
+					+ (int) (Math.cos(Math.toRadians(angle)) * RandomInt.anyRandomIntRange(0, 50)));
 			int y = (int) (area.getBounds2D().getCenterY()
-					+ (int) (Math.sin(Math.toRadians(angle)) * RandomInt.anyRandomIntRange(0, 30)));
+					+ (int) (Math.sin(Math.toRadians(angle)) * RandomInt.anyRandomIntRange(0, 50)));
 
-			area.add(new Area(new Ellipse2D.Double(x, y, RandomInt.anyRandomIntRange(10, 14),
-					RandomInt.anyRandomIntRange(10, 14))));
+			area.add(new Area(new Ellipse2D.Double(x, y, RandomInt.anyRandomIntRange(20, 34),
+					RandomInt.anyRandomIntRange(20, 34))));
 		}
 
 		return area;

@@ -45,7 +45,7 @@ public class AsteroidUtils {
 
 		Area result = AreaUtils.randomCircular();
 		
-		int count = RandomInt.anyRandomIntRange(0, 10);
+		int count = RandomInt.anyRandomIntRange(0, 50);
 
 		for (int i = 0; i < count; i++) {
 
@@ -63,7 +63,7 @@ public class AsteroidUtils {
 	
 	public static void randomise(Area area) {
 		
-		int count = RandomInt.anyRandomIntRange(0, (int)area.getBounds2D().getMaxY());
+		int count = RandomInt.anyRandomIntRange(0, (int)area.getBounds2D().getMaxY() / 2);
 
 		for (int i = 0; i < count; i++) {
 			

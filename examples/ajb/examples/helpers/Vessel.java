@@ -245,7 +245,7 @@ public class Vessel implements Serializable {
 
 		try {
 
-			FileOutputStream fos = new FileOutputStream(identifier + ".vessel");
+			FileOutputStream fos = new FileOutputStream(getIdentifier() + ".vessel");
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(this);
 			oos.close();

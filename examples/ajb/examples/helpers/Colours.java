@@ -10,6 +10,7 @@ public class Colours {
 	public static Color green = Color.decode("#cae682");
 	public static Color white = Color.decode("#f3f6ee");
 	public static Color gray = Color.decode("#656565");
+	public static Color brown = Color.decode("#4D341E");
 
 	public static Color makeTransparent(Color source, int alpha) {
 

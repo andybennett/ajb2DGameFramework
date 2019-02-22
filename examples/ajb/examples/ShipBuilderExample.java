@@ -27,6 +27,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 
+import ajb.examples.helpers.Asteroid;
+import ajb.examples.helpers.AsteroidUtils;
 import ajb.examples.helpers.LookAndFeelUtils;
 import ajb.examples.helpers.Starfield;
 import ajb.examples.helpers.Vessel;
@@ -49,6 +51,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 	Starfield starfield = null;
 	GameLoop loop = new GameLoop(this);
 	List<Vessel> vessels = new ArrayList<Vessel>();
+	List<Asteroid> asteroids = new ArrayList<Asteroid>();
 	Vessel selectedVessel = null;
 	JFrame frame = null;
 	int windowedWidth = 1024;
@@ -119,6 +122,12 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 		Graphics2D gr = (Graphics2D) g;
 
+		for (Asteroid asteroid : asteroids) {
+
+			asteroid.draw(gr);
+
+		}		
+		
 		for (Vessel vessel : vessels) {
 
 			vessel.draw(gr);
@@ -311,7 +320,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 			if (selectedVessel == null) {
 
-				JMenuItem newVessel = new JMenuItem(new AbstractAction("New") {
+				JMenuItem newVessel = new JMenuItem(new AbstractAction("New Vessel") {
 					public void actionPerformed(ActionEvent ae) {
 
 						Vessel vessel = new Vessel(VesselUtils.generate(), clickPoint);
@@ -323,6 +332,27 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 				});
 
 				myPopupMenu.add(newVessel);
+				
+				JMenuItem newDrone = new JMenuItem(new AbstractAction("New Drone") {
+					public void actionPerformed(ActionEvent ae) {
+
+
+
+					}
+				});
+
+				myPopupMenu.add(newDrone);				
+				
+				JMenuItem newAsteroid = new JMenuItem(new AbstractAction("New Asteroid") {
+					public void actionPerformed(ActionEvent ae) {
+
+						Asteroid asteroid = new Asteroid(AsteroidUtils.generate(), clickPoint);
+						asteroids.add(asteroid);
+
+					}
+				});
+
+				myPopupMenu.add(newAsteroid);				
 
 				JSeparator separator = new JSeparator();
 				myPopupMenu.add(separator);
