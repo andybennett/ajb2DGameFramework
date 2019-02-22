@@ -11,15 +11,18 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
@@ -100,6 +103,12 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 		super.drawBeforeTransform(g);
 
 		starfield.draw(g);
+
+		if (selectedVessel != null) {
+
+			selectedVessel.drawBeforeTransform(g, this.getWidth(), this.getHeight());
+
+		}
 
 	}
 
@@ -239,8 +248,18 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 			moveCamera(e);
 
-		}
+		} else if (SwingUtilities.isLeftMouseButton(e) && selectedVessel != null) {
 
+			try {
+
+				selectedVessel.move(transformPoint(new Point2D.Double(e.getX(), e.getY())));
+
+			} catch (NoninvertibleTransformException ex) {
+
+				ex.printStackTrace();
+
+			}
+		}
 	}
 
 	@Override
@@ -301,36 +320,91 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 						vessels.add(vessel);
 
 					}
-				});				
+				});
 
 				myPopupMenu.add(newVessel);
-				
-				JMenuItem load = new JMenuItem(new AbstractAction("Load") {
+
+				JSeparator separator = new JSeparator();
+				myPopupMenu.add(separator);
+
+				JMenuItem saveAll = new JMenuItem(new AbstractAction("Save All") {
 					public void actionPerformed(ActionEvent ae) {
 
-						try {
-							
-							FileInputStream fis = new FileInputStream("test.dat");
-							ObjectInputStream iis = new ObjectInputStream(fis);
-							Vessel vessel = (Vessel) iis.readObject();
-							vessels.add(vessel);
-							iis.close();
-							
-						} catch (Exception ex) {
+						for (Vessel vessel : vessels) {
 
-							ex.printStackTrace();
+							vessel.save();
 
 						}
 
 					}
 				});
-				
-				myPopupMenu.add(load);				
+				myPopupMenu.add(saveAll);
+
+				JSeparator separator1 = new JSeparator();
+				myPopupMenu.add(separator1);
+
+				JMenuItem load = new JMenuItem(new AbstractAction("Load") {
+					public void actionPerformed(ActionEvent ae) {
+
+						try {
+
+							// Create a file chooser
+							final JFileChooser fc = new JFileChooser();
+
+							fc.setCurrentDirectory(new File("."));
+							fc.setMultiSelectionEnabled(true);
+
+							// In response to a button click:
+							int returnVal = fc.showOpenDialog(frame);
+
+							if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+								for (File file : fc.getSelectedFiles()) {
+
+									try {
+										
+										FileInputStream fis = new FileInputStream(file);
+										ObjectInputStream iis = new ObjectInputStream(fis);
+										Vessel vessel = (Vessel) iis.readObject();
+										vessel.center = clickPoint;
+										vessels.add(vessel);
+										iis.close();
+										
+									} catch (Exception ex) {
+
+										ex.printStackTrace();
+										
+									}
+								}								
+							}
+
+						} catch (Exception ex) {
+
+							ex.printStackTrace();
+
+						}
+					}
+				});
+
+				myPopupMenu.add(load);
 
 			} else {
 
+				JMenuItem identifier = new JMenuItem(selectedVessel.getIdentifier());
+				myPopupMenu.add(identifier);
+
+				JSeparator separator = new JSeparator();
+				myPopupMenu.add(separator);
+
 				JMenu nameSubMenu = new JMenu("Name");
-				JMenuItem assignName = new JMenuItem("Assign");
+				JMenuItem assignName = new JMenuItem(new AbstractAction("Manual") {
+					public void actionPerformed(ActionEvent ae) {
+
+						selectedVessel.name = JOptionPane.showInputDialog("Name: ");
+
+					}
+				});
+				
 				JMenuItem randomName = new JMenuItem("Random");
 				nameSubMenu.add(assignName);
 				nameSubMenu.add(randomName);

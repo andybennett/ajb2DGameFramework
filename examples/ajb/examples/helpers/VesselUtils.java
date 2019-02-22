@@ -31,7 +31,7 @@ public class VesselUtils {
 
 			gr.setColor(Colours.background);
 			gr.fillRect(0, 0, img.getWidth(), img.getHeight());
-			
+
 			gr.setColor(Colours.gray);
 
 			gr.fill(result);
@@ -48,27 +48,19 @@ public class VesselUtils {
 
 		Area result = createSegment();
 
-		int count = RandomInt.anyRandomIntRange(0, 4);
+		int count = RandomInt.anyRandomIntRange(0, 6);
 
 		for (int i = 0; i < count; i++) {
 
 			Area segment = createSegment();
 			segment = AreaUtils.translateToPoint(segment,
-					new Point2D.Double(
-							RandomInt.anyRandomIntRange(0, 0),
-							RandomInt.anyRandomIntRange((int) result.getBounds2D().getCenterY(),
-									(int) result.getBounds2D().getCenterY() + 40)));
+					new Point2D.Double(RandomInt.anyRandomIntRange(0, 0), RandomInt.anyRandomIntRange(
+							(int) result.getBounds2D().getCenterY(), (int) result.getBounds2D().getCenterY() + 40)));
 			result.add(segment);
 
 		}
-//		
-//		count = RandomInt.anyRandomIntRange(100, 300);
-//
-//		for (int i = 0; i < count; i++) {
-//
-//			AreaUtils.subtractRandomLine(result);
-//
-//		}		
+
+		result = AreaUtils.getOutline(result);
 
 		return result;
 
@@ -76,7 +68,8 @@ public class VesselUtils {
 
 	public static Area createSegment() {
 
-		Area result = new Area(new Rectangle2D.Double(0, 0, 20, 100));
+		Area result = new Area(new Rectangle2D.Double(0, 0, RandomInt.anyRandomIntRange(10, 20),
+				RandomInt.anyRandomIntRange(20, 200)));
 
 		int count = RandomInt.anyRandomIntRange(100, 500);
 
@@ -91,7 +84,7 @@ public class VesselUtils {
 				AreaUtils.subtractRandomBlock(result);
 			}
 
-		}		
+		}
 
 		return result;
 

@@ -1,6 +1,6 @@
 package ajb.examples.helpers;
 
-import java.awt.Font;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
@@ -8,15 +8,17 @@ import java.awt.geom.Rectangle2D;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.UUID;
 
 public class Vessel implements Serializable {
 
 	private static final long serialVersionUID = 6238354968702292635L;
-	
+
 	public transient Area halfArea = null;
 	public transient Area displayArea = null;
 	public transient Area bounds = null;
 
+	public String identifier = UUID.randomUUID().toString();
 	public String name = null;
 	public Point2D.Double center = null;
 	public boolean selected = false;
@@ -25,6 +27,7 @@ public class Vessel implements Serializable {
 	double armour = 0;
 	double hull = 0;
 	int[][] pixelArray = null;
+	Color color = Colours.gray.darker();
 
 	public Vessel(Area area, Point2D.Double center) {
 
@@ -32,6 +35,23 @@ public class Vessel implements Serializable {
 		this.center = center;
 
 		generateDisplayArea();
+
+	}
+
+	public void drawBeforeTransform(Graphics2D g2d, int width, int height) {
+
+//		if (selected) {
+//
+//			g2d.setFont(new Font("Calibri", Font.BOLD, 18));
+//
+//			g2d.setColor(Colours.makeTransparent(Colours.background, 200));
+//
+//			g2d.fill(new Rectangle2D.Double(width - 400, 0, width, height));
+//
+//			g2d.setColor(Colours.green);
+//			g2d.drawString(identifier, width - (g2d.getFontMetrics().stringWidth(identifier) + 20), 20);
+//
+//		}
 
 	}
 
@@ -45,13 +65,12 @@ public class Vessel implements Serializable {
 
 			}
 
-			g2d.setFont(new Font("Calibri", Font.BOLD, 14));
 			g2d.rotate(Math.toRadians(rotationInDegrees), center.getX(), center.getY());
 
 			g2d.setColor(Colours.makeTransparent(Colours.background, 200));
 			g2d.fill(displayArea.getBounds2D());
 
-			g2d.setColor(Colours.blue.darker());
+			g2d.setColor(color);
 			g2d.fill(displayArea);
 
 		} catch (Exception ex) {
@@ -226,7 +245,7 @@ public class Vessel implements Serializable {
 
 		try {
 
-			FileOutputStream fos = new FileOutputStream("test.dat");
+			FileOutputStream fos = new FileOutputStream(identifier + ".vessel");
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(this);
 			oos.close();
@@ -237,5 +256,26 @@ public class Vessel implements Serializable {
 
 		}
 
+	}
+
+	public void move(Point2D.Double newCenter) {
+		
+		this.center = newCenter;
+		generateDisplayArea();
+
+	}
+	
+	public String getIdentifier() {
+		
+		String result = identifier;
+		
+		if (name != null) {
+			
+			result = name;
+			
+		}
+		
+		return result;
+		
 	}
 }

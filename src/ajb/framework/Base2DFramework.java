@@ -21,7 +21,6 @@ import java.awt.geom.Point2D;
 import java.util.Map;
 
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 @SuppressWarnings("serial")
 public class Base2DFramework extends JPanel
