@@ -71,7 +71,7 @@ public class VesselUtils {
 		Area result = new Area(new Rectangle2D.Double(0, 0, RandomInt.anyRandomIntRange(10, 20),
 				RandomInt.anyRandomIntRange(20, 200)));
 
-		int count = RandomInt.anyRandomIntRange(100, 500);
+		int count = RandomInt.anyRandomIntRange(100, 800);
 
 		for (int i = 0; i < count; i++) {
 

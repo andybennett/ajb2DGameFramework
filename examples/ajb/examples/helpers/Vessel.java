@@ -215,7 +215,7 @@ public class Vessel implements Serializable {
 
 		boolean result = false;
 
-		if (displayArea.contains(point)) {
+		if (displayArea.getBounds2D().contains(point)) {
 
 			result = true;
 
@@ -242,7 +242,7 @@ public class Vessel implements Serializable {
 			}
 
 		}
-
+		
 		try {
 
 			FileOutputStream fos = new FileOutputStream(getIdentifier() + ".vessel");
@@ -259,23 +259,23 @@ public class Vessel implements Serializable {
 	}
 
 	public void move(Point2D.Double newCenter) {
-		
+
 		this.center = newCenter;
 		generateDisplayArea();
 
 	}
-	
+
 	public String getIdentifier() {
-		
+
 		String result = identifier;
-		
+
 		if (name != null) {
-			
+
 			result = name;
-			
+
 		}
-		
+
 		return result;
-		
+
 	}
 }

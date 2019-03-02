@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Area;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.io.File;
@@ -28,7 +29,6 @@ import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 
 import ajb.examples.helpers.Asteroid;
-import ajb.examples.helpers.AsteroidUtils;
 import ajb.examples.helpers.LookAndFeelUtils;
 import ajb.examples.helpers.Starfield;
 import ajb.examples.helpers.Vessel;
@@ -126,8 +126,8 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 			asteroid.draw(gr);
 
-		}		
-		
+		}
+
 		for (Vessel vessel : vessels) {
 
 			vessel.draw(gr);
@@ -332,27 +332,22 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 				});
 
 				myPopupMenu.add(newVessel);
-				
-				JMenuItem newDrone = new JMenuItem(new AbstractAction("New Drone") {
+
+				JMenuItem newDrone = new JMenuItem(new AbstractAction("New Drone / Fighter") {
 					public void actionPerformed(ActionEvent ae) {
-
-
 
 					}
 				});
 
-				myPopupMenu.add(newDrone);				
-				
-				JMenuItem newAsteroid = new JMenuItem(new AbstractAction("New Asteroid") {
-					public void actionPerformed(ActionEvent ae) {
+				myPopupMenu.add(newDrone);
 
-						Asteroid asteroid = new Asteroid(AsteroidUtils.generate(), clickPoint);
-						asteroids.add(asteroid);
+				JMenuItem newMissile = new JMenuItem(new AbstractAction("New Missile") {
+					public void actionPerformed(ActionEvent ae) {
 
 					}
 				});
 
-				myPopupMenu.add(newAsteroid);				
+				myPopupMenu.add(newMissile);
 
 				JSeparator separator = new JSeparator();
 				myPopupMenu.add(separator);
@@ -392,20 +387,20 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 								for (File file : fc.getSelectedFiles()) {
 
 									try {
-										
+
 										FileInputStream fis = new FileInputStream(file);
 										ObjectInputStream iis = new ObjectInputStream(fis);
 										Vessel vessel = (Vessel) iis.readObject();
 										vessel.center = clickPoint;
 										vessels.add(vessel);
 										iis.close();
-										
+
 									} catch (Exception ex) {
 
 										ex.printStackTrace();
-										
+
 									}
-								}								
+								}
 							}
 
 						} catch (Exception ex) {
@@ -434,7 +429,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 					}
 				});
-				
+
 				JMenuItem randomName = new JMenuItem("Random");
 				nameSubMenu.add(assignName);
 				nameSubMenu.add(randomName);
@@ -466,6 +461,20 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 				});
 
 				myPopupMenu.add(deleteVessel);
+				
+				JSeparator separator3 = new JSeparator();
+				myPopupMenu.add(separator3);
+
+				JMenuItem cloneVessel = new JMenuItem(new AbstractAction("Clone") {
+					public void actionPerformed(ActionEvent ae) {
+
+						Vessel newVessel = new Vessel(new Area(selectedVessel.halfArea), selectedVessel.center);
+						vessels.add(newVessel);
+
+					}
+				});
+
+				myPopupMenu.add(cloneVessel);				
 
 			}
 
