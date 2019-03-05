@@ -48,7 +48,7 @@ public class VesselUtils {
 
 		Area result = createSegment();
 
-		int count = RandomInt.anyRandomIntRange(0, 6);
+		int count = RandomInt.anyRandomIntRange(0, 2);
 
 		for (int i = 0; i < count; i++) {
 
@@ -81,7 +81,7 @@ public class VesselUtils {
 
 			} else {
 
-				AreaUtils.subtractRandomBlock(result);
+				//AreaUtils.subtractRandomBlock(result);
 			}
 
 		}

@@ -29,6 +29,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 
 import ajb.examples.helpers.Asteroid;
+import ajb.examples.helpers.Colours;
 import ajb.examples.helpers.LookAndFeelUtils;
 import ajb.examples.helpers.Starfield;
 import ajb.examples.helpers.Vessel;
@@ -36,6 +37,7 @@ import ajb.examples.helpers.VesselUtils;
 import ajb.framework.Base2DFramework;
 import ajb.game.GameLoop;
 import ajb.interfaces.Loop;
+import ajb.ships.ShipUtils;
 
 @SuppressWarnings("serial")
 public class ShipBuilderExample extends Base2DFramework implements Loop {
@@ -87,7 +89,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 		if (starfield != null) {
 
-			starfield.twinkle();
+			//starfield.twinkle();
 
 		}
 
@@ -105,13 +107,19 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 		super.drawBeforeTransform(g);
 
-		starfield.draw(g);
+		//starfield.draw(g);
 
 		if (selectedVessel != null) {
 
 			selectedVessel.drawBeforeTransform(g, this.getWidth(), this.getHeight());
 
 		}
+		
+		g.setColor(Colours.makeTransparent(Colours.gray, 100));
+		g.fillRect(0, 0, this.getWidth(), 30);
+		
+		g.setColor(Colours.white);
+		g.drawString("FLEET DESIGNER", 20, 20);
 
 	}
 
@@ -323,7 +331,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 				JMenuItem newVessel = new JMenuItem(new AbstractAction("New Vessel") {
 					public void actionPerformed(ActionEvent ae) {
 
-						Vessel vessel = new Vessel(VesselUtils.generate(), clickPoint);
+						Vessel vessel = new Vessel(ShipUtils.generate(), clickPoint);
 						vessel.selected = true;
 						selectedVessel = vessel;
 						vessels.add(vessel);

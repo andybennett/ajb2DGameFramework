@@ -5,5 +5,10 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ajbRandom"/>
 	<classpathentry kind="lib" path="C:/Users/andyj/git/ajb2DGameFramework/lib/json-simple-1.1.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ajbColours"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ajbGeometry"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ajbImages"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ajbProceduralContentGeneration"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ajbTrig"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

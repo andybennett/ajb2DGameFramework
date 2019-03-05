@@ -63,6 +63,18 @@ public class AreaUtils {
 
 	}
 
+	public static void addRandomCenteredBlock(Area area) {
+
+		Point2D.Double point = AreaUtils.findRandomPointWithinArea(area);
+
+		int width = RandomInt.anyRandomIntRange(1, 10);
+		int height = RandomInt.anyRandomIntRange(1, 40);
+
+		area.add(
+				new Area(new Rectangle2D.Double(point.x - (width / 2), point.y - (height / 2), width / 2, height / 2)));
+
+	}
+
 	public static void addRandomBlockAlongMinX(Area area) {
 
 		area.add(new Area(new Rectangle2D.Double(

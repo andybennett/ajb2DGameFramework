@@ -10,6 +10,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.UUID;
 
+import ajb.ships.ShipUtils;
+
 public class Vessel implements Serializable {
 
 	private static final long serialVersionUID = 6238354968702292635L;
@@ -78,7 +80,6 @@ public class Vessel implements Serializable {
 			ex.printStackTrace();
 
 		}
-
 	}
 
 	public void generateDisplayArea() {
@@ -128,7 +129,7 @@ public class Vessel implements Serializable {
 
 		try {
 
-			this.halfArea = VesselUtils.generate();
+			this.halfArea = ShipUtils.generate();
 			generateDisplayArea();
 
 		} catch (Exception ex) {
