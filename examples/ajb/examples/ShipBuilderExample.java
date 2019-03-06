@@ -86,7 +86,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 		if (starfield != null) {
 
-			starfield.twinkle();
+			//starfield.twinkle();
 
 		}
 
@@ -104,7 +104,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 		super.drawBeforeTransform(g);
 
-		starfield.draw(g);
+		//starfield.draw(g);
 
 	}
 

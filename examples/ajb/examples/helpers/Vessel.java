@@ -81,7 +81,7 @@ public class Vessel implements Serializable {
 					new Point2D.Double(center.getX() - (displayArea.getBounds2D().getWidth() / 2),
 							center.getY() - (displayArea.getBounds2D().getHeight() / 2)));
 
-			bounds = AreaUtils.getOutline(displayArea);
+			//bounds = AreaUtils.getOutline(displayArea);
 
 		} catch (Exception ex) {
 
