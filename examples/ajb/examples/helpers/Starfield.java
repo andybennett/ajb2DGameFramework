@@ -66,9 +66,9 @@ public class Starfield {
 
 					star.alpha -= 10;
 
-					if (star.alpha < 1) {
+					if (star.alpha < 50) {
 
-						star.alpha = 1;
+						star.alpha = 50;
 
 					}
 				}
@@ -94,7 +94,7 @@ class Star {
 
 	Point2D.Double position = null;
 	int size = RandomInt.anyRandomIntRange(1, 5);
-	int alpha = RandomInt.anyRandomIntRange(1, 255);
+	int alpha = RandomInt.anyRandomIntRange(50, 255);
 	Color colour = ColourUtils.white;
 
 }
