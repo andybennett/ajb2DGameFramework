@@ -6,6 +6,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import ajb.colours.ColourUtils;
 import ajb.random.RandomInt;
 
 public class Starfield {
@@ -88,6 +89,6 @@ class Star {
 
     Point2D.Double position = null;
     int size = RandomInt.anyRandomIntRange(1, 5);
-    Color colour = Colours.white;
+    Color colour = ColourUtils.white;
 
 }

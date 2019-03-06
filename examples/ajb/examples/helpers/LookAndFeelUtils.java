@@ -3,6 +3,8 @@ package ajb.examples.helpers;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import ajb.colours.ColourUtils;
+
 public class LookAndFeelUtils {
 
 	public static void setNimbusLookAndfeel() {
@@ -20,13 +22,13 @@ public class LookAndFeelUtils {
 			UIManager.put("TabbedPane.tabsOpaque", true);
 
 			// set Nimbus LAF primary colors
-			UIManager.put("control", Colours.background);
-			UIManager.put("nimbusBase", Colours.background);
-			UIManager.put("nimbusFocus", Colours.background);
-			UIManager.put("nimbusLightBackground", Colours.background);
-			UIManager.put("nimbusSelectionBackground", Colours.background);
-			UIManager.put("text", Colours.green);
-			UIManager.put("List[Selected].textForeground", Colours.green);
+			UIManager.put("control", ColourUtils.background);
+			UIManager.put("nimbusBase", ColourUtils.background);
+			UIManager.put("nimbusFocus", ColourUtils.background);
+			UIManager.put("nimbusLightBackground", ColourUtils.background);
+			UIManager.put("nimbusSelectionBackground", ColourUtils.background);
+			UIManager.put("text", ColourUtils.green);
+			UIManager.put("List[Selected].textForeground", ColourUtils.green);
 
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e) {

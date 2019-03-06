@@ -28,12 +28,10 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 
-import ajb.examples.helpers.Asteroid;
-import ajb.examples.helpers.Colours;
+import ajb.colours.ColourUtils;
 import ajb.examples.helpers.LookAndFeelUtils;
 import ajb.examples.helpers.Starfield;
 import ajb.examples.helpers.Vessel;
-import ajb.examples.helpers.VesselUtils;
 import ajb.framework.Base2DFramework;
 import ajb.game.GameLoop;
 import ajb.interfaces.Loop;
@@ -53,7 +51,6 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 	Starfield starfield = null;
 	GameLoop loop = new GameLoop(this);
 	List<Vessel> vessels = new ArrayList<Vessel>();
-	List<Asteroid> asteroids = new ArrayList<Asteroid>();
 	Vessel selectedVessel = null;
 	JFrame frame = null;
 	int windowedWidth = 1024;
@@ -115,10 +112,10 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 		}
 		
-		g.setColor(Colours.makeTransparent(Colours.gray, 100));
+		g.setColor(ColourUtils.makeTransparent(ColourUtils.gray, 100));
 		g.fillRect(0, 0, this.getWidth(), 30);
 		
-		g.setColor(Colours.white);
+		g.setColor(ColourUtils.white);
 		g.drawString("FLEET DESIGNER", 20, 20);
 
 	}
@@ -129,12 +126,6 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 		super.paint(g);
 
 		Graphics2D gr = (Graphics2D) g;
-
-		for (Asteroid asteroid : asteroids) {
-
-			asteroid.draw(gr);
-
-		}
 
 		for (Vessel vessel : vessels) {
 

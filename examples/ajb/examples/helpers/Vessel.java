@@ -10,6 +10,9 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.UUID;
 
+import ajb.area.AreaUtils;
+import ajb.area.GeometryUtils;
+import ajb.colours.ColourUtils;
 import ajb.ships.ShipUtils;
 
 public class Vessel implements Serializable {
@@ -29,7 +32,7 @@ public class Vessel implements Serializable {
 	double armour = 0;
 	double hull = 0;
 	int[][] pixelArray = null;
-	Color color = Colours.gray.darker();
+	Color color = ColourUtils.gray.darker();
 
 	public Vessel(Area area, Point2D.Double center) {
 
@@ -69,7 +72,7 @@ public class Vessel implements Serializable {
 
 			g2d.rotate(Math.toRadians(rotationInDegrees), center.getX(), center.getY());
 
-			g2d.setColor(Colours.makeTransparent(Colours.background, 200));
+			g2d.setColor(ColourUtils.makeTransparent(ColourUtils.background, 200));
 			g2d.fill(displayArea.getBounds2D());
 
 			g2d.setColor(color);
@@ -144,22 +147,7 @@ public class Vessel implements Serializable {
 
 		try {
 
-			AreaUtils.addRandomBlock(this.halfArea);
-			generateDisplayArea();
-
-		} catch (Exception ex) {
-
-			ex.printStackTrace();
-
-		}
-
-	}
-
-	public void addSpine() {
-
-		try {
-
-			AreaUtils.addRandomBlockAlongMinX(this.halfArea);
+			GeometryUtils.addRandomBlock(this.halfArea);
 			generateDisplayArea();
 
 		} catch (Exception ex) {
@@ -174,7 +162,7 @@ public class Vessel implements Serializable {
 
 		try {
 
-			AreaUtils.subtractRandomBlock(this.halfArea);
+			GeometryUtils.subtractRandomBlock(this.halfArea);
 			generateDisplayArea();
 
 		} catch (Exception ex) {
@@ -188,7 +176,7 @@ public class Vessel implements Serializable {
 
 		try {
 
-			AreaUtils.subtractRandomLine(this.halfArea);
+			GeometryUtils.subtractRandomLine(this.halfArea);
 			generateDisplayArea();
 
 		} catch (Exception ex) {
@@ -243,7 +231,7 @@ public class Vessel implements Serializable {
 			}
 
 		}
-		
+
 		try {
 
 			FileOutputStream fos = new FileOutputStream(getIdentifier() + ".vessel");
