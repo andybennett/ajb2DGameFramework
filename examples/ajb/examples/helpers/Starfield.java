@@ -11,84 +11,90 @@ import ajb.random.RandomInt;
 
 public class Starfield {
 
-    List<Star> stars = new ArrayList<Star>();
-    int x, y;
-    int width, height;
-    int minAmountOfstars, maxAmountOfStars;
+	List<Star> stars = new ArrayList<Star>();
+	int x, y;
+	int width, height;
+	int minAmountOfstars, maxAmountOfStars;
 
-    public Starfield(int x, int y, int width, int height, int minAmountOfstars, int maxAmountOfStars) {
+	public Starfield(int x, int y, int width, int height, int minAmountOfstars, int maxAmountOfStars) {
 
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.minAmountOfstars = minAmountOfstars;
-        this.maxAmountOfStars = maxAmountOfStars;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.minAmountOfstars = minAmountOfstars;
+		this.maxAmountOfStars = maxAmountOfStars;
 
-        createStars();
+		createStars();
 
-    }
+	}
 
-    private void createStars() {
+	private void createStars() {
 
-        int amountOfstars = RandomInt.anyRandomIntRange(minAmountOfstars, maxAmountOfStars);
+		int amountOfstars = RandomInt.anyRandomIntRange(minAmountOfstars, maxAmountOfStars);
 
-        for (int i = 0; i < amountOfstars; i++) {
+		for (int i = 0; i < amountOfstars; i++) {
 
-            Star star = new Star();
+			Star star = new Star();
 
-            star.position = new Point2D.Double(RandomInt.anyRandomIntRange(x, width),
-                    RandomInt.anyRandomIntRange(y, height));
+			star.position = new Point2D.Double(RandomInt.anyRandomIntRange(x, width),
+					RandomInt.anyRandomIntRange(y, height));
 
-            stars.add(star);
+			stars.add(star);
 
-        }
+		}
 
-    }
+	}
 
-    public void twinkle() {
+	public void twinkle() {
 
-        for (Star star : stars) {
+		for (Star star : stars) {
 
-            if (RandomInt.anyRandomIntRange(0, 100) > 90) {
+			if (RandomInt.anyRandomIntRange(0, 100) > 90) {
 
-                if (RandomInt.anyRandomIntRange(0, 1) == 1) {
+				if (RandomInt.anyRandomIntRange(0, 1) == 1) {
 
-                    star.colour = star.colour.brighter();
+					star.alpha += 10;
 
-                } else {
+					if (star.alpha > 255) {
 
-                    if (star.colour.getBlue() > 100) {
+						star.alpha = 255;
 
-                        star.colour = star.colour.darker();
+					}
 
-                    }
-                }
-            }
-        }
-    }
+				} else {
 
-    public void draw(Graphics g) {
+					star.alpha -= 10;
 
-        for (Star star : stars) {
+					if (star.alpha < 1) {
 
-            g.setColor(star.colour);
+						star.alpha = 1;
 
-            g.fillOval((int) star.position.x, (int) star.position.y, star.size, star.size);
+					}
+				}
+			}
+		}
+	}
 
-        }
+	public void draw(Graphics g) {
 
-        //g.setColor(Color.decode("#242424").darker());
-        //g.drawRect(x, y, width * 2, height * 2);
+		for (Star star : stars) {
 
-    }
+			g.setColor(ColourUtils.makeTransparent(star.colour, star.alpha));
+
+			g.fillOval((int) star.position.x, (int) star.position.y, star.size, star.size);
+
+		}
+
+	}
 
 }
 
 class Star {
 
-    Point2D.Double position = null;
-    int size = RandomInt.anyRandomIntRange(1, 5);
-    Color colour = ColourUtils.white;
+	Point2D.Double position = null;
+	int size = RandomInt.anyRandomIntRange(1, 5);
+	int alpha = RandomInt.anyRandomIntRange(1, 255);
+	Color colour = ColourUtils.white;
 
 }
