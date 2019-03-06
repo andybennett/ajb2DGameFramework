@@ -52,8 +52,8 @@ public class Vessel implements Serializable {
 
 			g2d.rotate(Math.toRadians(rotationInDegrees), center.getX(), center.getY());
 
-			g2d.setColor(ColourUtils.makeTransparent(ColourUtils.background, 200));
-			g2d.fill(bounds);
+			//g2d.setColor(ColourUtils.makeTransparent(ColourUtils.background, 200));
+			//g2d.fill(bounds);
 
 			g2d.setColor(color);
 			g2d.fill(displayArea);
