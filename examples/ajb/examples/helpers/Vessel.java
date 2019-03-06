@@ -4,15 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.UUID;
 
 import ajb.area.AreaUtils;
 import ajb.colours.ColourUtils;
 import ajb.geometry.GeometryUtils;
+import ajb.images.ImageUtils;
 import ajb.ships.ShipUtils;
 
 public class Vessel implements Serializable {
@@ -31,7 +29,6 @@ public class Vessel implements Serializable {
 	double shields = 0;
 	double armour = 0;
 	double hull = 0;
-	int[][] pixelArray = null;
 	Color color = ColourUtils.gray.darker();
 
 	public Vessel(Area area, Point2D.Double center) {
@@ -71,25 +68,6 @@ public class Vessel implements Serializable {
 	public void generateDisplayArea() {
 
 		try {
-
-			if (halfArea == null) {
-
-				halfArea = new Area();
-
-				// Build the area from the pixel array
-				for (int x = 0; x < pixelArray.length; x++) {
-
-					for (int y = 0; y < pixelArray[0].length; y++) {
-
-						if (pixelArray[x][y] == 1) {
-							halfArea.add(new Area(new Rectangle2D.Double(x, y, 1, 1)));
-						}
-
-					}
-
-				}
-
-			}
 
 			// Copy the area.
 			displayArea = new Area(halfArea);
@@ -205,30 +183,7 @@ public class Vessel implements Serializable {
 		Area copy = new Area(halfArea);
 		copy = AreaUtils.translateToTopLeft(copy);
 
-		pixelArray = new int[(int) copy.getBounds2D().getWidth()][(int) copy.getBounds2D().getHeight()];
-
-		for (int x = 0; x < (int) copy.getBounds2D().getWidth(); x++) {
-
-			for (int y = 0; y < (int) copy.getBounds2D().getHeight(); y++) {
-
-				pixelArray[x][y] = copy.contains(x, y) ? 1 : 0;
-
-			}
-
-		}
-
-		try {
-
-			FileOutputStream fos = new FileOutputStream(getIdentifier() + ".vessel");
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(this);
-			oos.close();
-
-		} catch (Exception ex) {
-
-			ex.printStackTrace();
-
-		}
+		ImageUtils.save(ImageUtils.drawArea(copy), "png", this.getIdentifier());		
 
 	}
 

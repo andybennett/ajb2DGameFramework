@@ -13,8 +13,6 @@ import java.awt.geom.Area;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,13 +26,15 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 
-import ajb.colours.ColourUtils;
 import ajb.examples.helpers.LookAndFeelUtils;
 import ajb.examples.helpers.Starfield;
 import ajb.examples.helpers.Vessel;
 import ajb.framework.Base2DFramework;
 import ajb.game.GameLoop;
+import ajb.images.ImageUtils;
 import ajb.interfaces.Loop;
+import ajb.random.RandomGibberish;
+import ajb.random.RandomInt;
 import ajb.ships.ShipUtils;
 
 @SuppressWarnings("serial")
@@ -320,22 +320,6 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 				myPopupMenu.add(newVessel);
 
-				JMenuItem newDrone = new JMenuItem(new AbstractAction("New Drone / Fighter") {
-					public void actionPerformed(ActionEvent ae) {
-
-					}
-				});
-
-				myPopupMenu.add(newDrone);
-
-				JMenuItem newMissile = new JMenuItem(new AbstractAction("New Missile") {
-					public void actionPerformed(ActionEvent ae) {
-
-					}
-				});
-
-				myPopupMenu.add(newMissile);
-
 				JSeparator separator = new JSeparator();
 				myPopupMenu.add(separator);
 
@@ -375,12 +359,9 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 									try {
 
-										FileInputStream fis = new FileInputStream(file);
-										ObjectInputStream iis = new ObjectInputStream(fis);
-										Vessel vessel = (Vessel) iis.readObject();
-										vessel.center = clickPoint;
+										Vessel vessel = new Vessel(
+												ImageUtils.createAreaFromImage(ImageUtils.getImage(file)), clickPoint);
 										vessels.add(vessel);
-										iis.close();
 
 									} catch (Exception ex) {
 
@@ -417,7 +398,14 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 					}
 				});
 
-				JMenuItem randomName = new JMenuItem("Random");
+				JMenuItem randomName = new JMenuItem(new AbstractAction("Random") {
+					public void actionPerformed(ActionEvent ae) {
+
+						selectedVessel.name = RandomGibberish.anyRandomGibberish(RandomInt.anyRandomIntRange(2, 3));
+
+					}
+				});
+
 				nameSubMenu.add(assignName);
 				nameSubMenu.add(randomName);
 
