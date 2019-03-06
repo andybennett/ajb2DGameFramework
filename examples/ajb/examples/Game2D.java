@@ -13,54 +13,54 @@ import ajb.interfaces.Loop;
 @SuppressWarnings("serial")
 public class Game2D extends Base2DFramework implements Loop {
 
-    @SuppressWarnings("unused")
-    public static void main(String[] args) {
-        
-    	LookAndFeelUtils.setNimbusLookAndfeel();
-        Game2D app = new Game2D();
-        
-    }
+	@SuppressWarnings("unused")
+	public static void main(String[] args) {
 
-    GameLoop loop = new GameLoop(this);
+		LookAndFeelUtils.setNimbusLookAndfeel();
+		Game2D app = new Game2D();
 
-    public Game2D() {
-        
-        super();
+	}
 
-        JFrame frame = new JFrame();
-        frame.setTitle("Example");
-        frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(1024, 768);
-        frame.setLocationRelativeTo(null);
-        frame.add(this);
+	GameLoop loop = new GameLoop(this);
 
-        frame.setVisible(true);
+	public Game2D() {
 
-        loop.go();
-        
-    }
+		super();
 
-    @Override
-    public void doLogic(double delta) {
-        // logic here
-    }
+		JFrame frame = new JFrame();
+		frame.setTitle("Example");
+		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		frame.setSize(1024, 768);
+		frame.setLocationRelativeTo(null);
+		frame.add(this);
 
-    @Override
-    public void render() {
-        
-        this.repaint();
-        
-    }
+		frame.setVisible(true);
 
-    @Override
-    public void paint(Graphics g) {
-        
-        super.paint(g);
+		loop.go();
 
-        // draw here
-        g.setColor(Color.WHITE);
-        g.drawRect((this.getWidth() / 2) - 50, (this.getHeight() / 2) - 50, 100, 100);
-        
-    }
+	}
+
+	@Override
+	public void doLogic(double delta) {
+		// logic here
+	}
+
+	@Override
+	public void render() {
+
+		this.repaint();
+
+	}
+
+	@Override
+	public void paint(Graphics g) {
+
+		super.paint(g);
+
+		// draw here
+		g.setColor(Color.WHITE);
+		g.drawRect((this.getWidth() / 2) - 50, (this.getHeight() / 2) - 50, 100, 100);
+
+	}
 
 }

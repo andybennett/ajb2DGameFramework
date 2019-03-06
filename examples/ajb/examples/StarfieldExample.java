@@ -16,79 +16,79 @@ import ajb.interfaces.Loop;
 @SuppressWarnings("serial")
 public class StarfieldExample extends Base2DFramework implements Loop {
 
-    @SuppressWarnings("unused")
-    public static void main(String[] args) {
+	@SuppressWarnings("unused")
+	public static void main(String[] args) {
 
-        StarfieldExample app = new StarfieldExample();
+		StarfieldExample app = new StarfieldExample();
 
-    }
+	}
 
-    Starfield starfield = null;
-    GameLoop loop = new GameLoop(this);
+	Starfield starfield = null;
+	GameLoop loop = new GameLoop(this);
 
-    public StarfieldExample() {
+	public StarfieldExample() {
 
-        super();
+		super();
 
-        starfield = new Starfield(-5000, -5000, 5000, 5000, 5000, 10000);
+		starfield = new Starfield(-5000, -5000, 5000, 5000, 5000, 10000);
 
-        setBackground(Color.decode("#242424"));
+		setBackground(Color.decode("#242424"));
 
-        JFrame frame = new JFrame();
-        frame.setTitle("Example");
-        frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(1024, 768);
-        frame.setLocationRelativeTo(null);
-        frame.add(this);
+		JFrame frame = new JFrame();
+		frame.setTitle("Example");
+		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		frame.setSize(1024, 768);
+		frame.setLocationRelativeTo(null);
+		frame.add(this);
 
-        frame.addKeyListener(this);
+		frame.addKeyListener(this);
 
-        frame.setVisible(true);
+		frame.setVisible(true);
 
-        loop.go();
+		loop.go();
 
-    }
+	}
 
-    @Override
-    public void doLogic(double delta) {
+	@Override
+	public void doLogic(double delta) {
 
-        starfield.twinkle();
+		starfield.twinkle();
 
-    }
+	}
 
-    @Override
-    public void render() {
+	@Override
+	public void render() {
 
-        this.repaint();
+		this.repaint();
 
-    }
+	}
 
-    @Override
-    public void paint(Graphics g) {
+	@Override
+	public void paint(Graphics g) {
 
-        super.paint(g);
+		super.paint(g);
 
-        // draw here
-        starfield.draw(g);
+		// draw here
+		starfield.draw(g);
 
-    }
+	}
 
-    @Override
-    public void keyPressed(KeyEvent e) {
+	@Override
+	public void keyPressed(KeyEvent e) {
 
-        if (e.getKeyCode() == KeyEvent.VK_HOME) {
+		if (e.getKeyCode() == KeyEvent.VK_HOME) {
 
-            try {
+			try {
 
-                moveToPoint(transformPoint(new Point2D.Double(0 + this.getWidth() / 2, 0 + this.getHeight() / 2)));
+				moveToPoint(transformPoint(new Point2D.Double(0 + this.getWidth() / 2, 0 + this.getHeight() / 2)));
 
-            } catch (NoninvertibleTransformException e1) {
+			} catch (NoninvertibleTransformException e1) {
 
-                e1.printStackTrace();
+				e1.printStackTrace();
 
-            }
-        }
+			}
+		}
 
-    }
+	}
 
 }

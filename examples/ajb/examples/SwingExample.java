@@ -9,31 +9,31 @@ import ajb.examples.helpers.LookAndFeelUtils;
 
 public class SwingExample {
 
-    @SuppressWarnings("unused")
-    public static void main(String[] args) {
-        
-    	LookAndFeelUtils.setNimbusLookAndfeel();
-        SwingExample app = new SwingExample();
-        
-    }
+	@SuppressWarnings("unused")
+	public static void main(String[] args) {
 
-    public SwingExample() {
-        
-        super();
+		LookAndFeelUtils.setNimbusLookAndfeel();
+		SwingExample app = new SwingExample();
 
-        JFrame frame = new JFrame();
-        frame.setTitle("Example");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(1024, 768);
-        frame.setLocationRelativeTo(null);
-        
-        JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("Panel1", new JPanel());
-        
-        frame.add(tabs);
+	}
 
-        frame.setVisible(true);
-        
-    }
+	public SwingExample() {
+
+		super();
+
+		JFrame frame = new JFrame();
+		frame.setTitle("Example");
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		frame.setSize(1024, 768);
+		frame.setLocationRelativeTo(null);
+
+		JTabbedPane tabs = new JTabbedPane();
+		tabs.addTab("Panel1", new JPanel());
+
+		frame.add(tabs);
+
+		frame.setVisible(true);
+
+	}
 
 }

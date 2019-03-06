@@ -4,98 +4,98 @@ import ajb.interfaces.Loop;
 
 public class GameLoop {
 
-    private boolean gameRunning = true;
-    private long lastFpsTime;
-    private int fps;
+	private boolean gameRunning = true;
+	private long lastFpsTime;
+	private int fps;
 
-    private Loop game;
+	private Loop game;
 
-    public GameLoop(Loop game) {
-        
-        this.game = game;
-        
-    }
+	public GameLoop(Loop game) {
 
-    public void go() {
+		this.game = game;
 
-        long lastLoopTime = System.nanoTime();
+	}
 
-        final int TARGET_FPS = 60;
+	public void go() {
 
-        final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+		long lastLoopTime = System.nanoTime();
 
-        // keep looping round until the game ends
-        while (gameRunning) {
-            
-            // work out how long its been since the last update, this
-            // will be used to calculate how far the entities should move this
-            // loop
-            long now = System.nanoTime();
+		final int TARGET_FPS = 60;
 
-            long updateLength = now - lastLoopTime;
+		final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
 
-            lastLoopTime = now;
-            double delta = updateLength / ((double) OPTIMAL_TIME);
+		// keep looping round until the game ends
+		while (gameRunning) {
 
-            // update the frame counter
-            lastFpsTime += updateLength;
+			// work out how long its been since the last update, this
+			// will be used to calculate how far the entities should move this
+			// loop
+			long now = System.nanoTime();
 
-            fps++;
+			long updateLength = now - lastLoopTime;
 
-            // update our FPS counter if a second has passed since we last
-            // recorded
-            if (lastFpsTime >= 1000000000) {
-                
-                lastFpsTime = 0;
-                fps = 0;
-                
-            }
+			lastLoopTime = now;
+			double delta = updateLength / ((double) OPTIMAL_TIME);
 
-            // update the game logic
-            game.doLogic(delta);
+			// update the frame counter
+			lastFpsTime += updateLength;
 
-            // draw everything
-            game.render();
+			fps++;
 
-            // we want each frame to take 10 milliseconds, to do this
-            // we've recorded when we started the frame. We add 10 milliseconds
+			// update our FPS counter if a second has passed since we last
+			// recorded
+			if (lastFpsTime >= 1000000000) {
 
-            // to this and then factor in the current time to give
-            // us our final value to wait for
+				lastFpsTime = 0;
+				fps = 0;
 
-            // remember this is in ms, whereas our lastLoopTime etc. vars are in
-            // ns.
+			}
 
-            try {
-                
-            	long sleepTime = (lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
-                Thread.sleep(sleepTime > 0 ? sleepTime : 0);
-                
-            } catch (InterruptedException e) {
-                
-                e.printStackTrace();
-                
-            }
-            
-        }
-        
-    }
+			// update the game logic
+			game.doLogic(delta);
 
-    public boolean isGameRunning() {
-        
-        return gameRunning;
-        
-    }
+			// draw everything
+			game.render();
 
-    public void setGameRunning(boolean gameRunning) {
-        
-        this.gameRunning = gameRunning;
-        
-    }
+			// we want each frame to take 10 milliseconds, to do this
+			// we've recorded when we started the frame. We add 10 milliseconds
 
-    public int getFps() {
-        
-        return fps;
-        
-    }
+			// to this and then factor in the current time to give
+			// us our final value to wait for
+
+			// remember this is in ms, whereas our lastLoopTime etc. vars are in
+			// ns.
+
+			try {
+
+				long sleepTime = (lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
+				Thread.sleep(sleepTime > 0 ? sleepTime : 0);
+
+			} catch (InterruptedException e) {
+
+				e.printStackTrace();
+
+			}
+
+		}
+
+	}
+
+	public boolean isGameRunning() {
+
+		return gameRunning;
+
+	}
+
+	public void setGameRunning(boolean gameRunning) {
+
+		this.gameRunning = gameRunning;
+
+	}
+
+	public int getFps() {
+
+		return fps;
+
+	}
 }

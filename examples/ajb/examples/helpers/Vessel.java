@@ -43,23 +43,6 @@ public class Vessel implements Serializable {
 
 	}
 
-	public void drawBeforeTransform(Graphics2D g2d, int width, int height) {
-
-//		if (selected) {
-//
-//			g2d.setFont(new Font("Calibri", Font.BOLD, 18));
-//
-//			g2d.setColor(Colours.makeTransparent(Colours.background, 200));
-//
-//			g2d.fill(new Rectangle2D.Double(width - 400, 0, width, height));
-//
-//			g2d.setColor(Colours.green);
-//			g2d.drawString(identifier, width - (g2d.getFontMetrics().stringWidth(identifier) + 20), 20);
-//
-//		}
-
-	}
-
 	public void draw(Graphics2D g2d) {
 
 		try {
@@ -73,7 +56,7 @@ public class Vessel implements Serializable {
 			g2d.rotate(Math.toRadians(rotationInDegrees), center.getX(), center.getY());
 
 			g2d.setColor(ColourUtils.makeTransparent(ColourUtils.background, 200));
-			g2d.fill(displayArea.getBounds2D());
+			g2d.fill(bounds);
 
 			g2d.setColor(color);
 			g2d.fill(displayArea);
@@ -119,6 +102,8 @@ public class Vessel implements Serializable {
 			displayArea = AreaUtils.translateToPoint(displayArea,
 					new Point2D.Double(center.getX() - (displayArea.getBounds2D().getWidth() / 2),
 							center.getY() - (displayArea.getBounds2D().getHeight() / 2)));
+
+			bounds = AreaUtils.getOutline(displayArea);
 
 		} catch (Exception ex) {
 

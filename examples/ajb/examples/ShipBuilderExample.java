@@ -106,18 +106,6 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 		starfield.draw(g);
 
-		if (selectedVessel != null) {
-
-			selectedVessel.drawBeforeTransform(g, this.getWidth(), this.getHeight());
-
-		}
-		
-		g.setColor(ColourUtils.makeTransparent(ColourUtils.gray, 100));
-		g.fillRect(0, 0, this.getWidth(), 30);
-		
-		g.setColor(ColourUtils.white);
-		g.drawString("FLEET DESIGNER", 20, 20);
-
 	}
 
 	@Override
@@ -460,7 +448,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 				});
 
 				myPopupMenu.add(deleteVessel);
-				
+
 				JSeparator separator3 = new JSeparator();
 				myPopupMenu.add(separator3);
 
@@ -473,7 +461,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 					}
 				});
 
-				myPopupMenu.add(cloneVessel);				
+				myPopupMenu.add(cloneVessel);
 
 			}
 

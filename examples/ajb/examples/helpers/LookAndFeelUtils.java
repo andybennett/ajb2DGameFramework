@@ -11,12 +11,12 @@ public class LookAndFeelUtils {
 
 		// set Nimbus Look And Feel
 		try {
-			
+
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-			
+
 			// to nod display tabs
 			UIManager.put("EditorTabDisplayerUI", "icare.ui.tweak.tab.NoTabsTabDisplayerUI");
-			
+
 			// because Nimbus LAF do not use opaque option, force it to allow painting of
 			// custom tab.
 			UIManager.put("TabbedPane.tabsOpaque", true);
@@ -32,9 +32,9 @@ public class LookAndFeelUtils {
 
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e) {
-			
+
 			e.printStackTrace();
-			
+
 		}
 	}
 }
