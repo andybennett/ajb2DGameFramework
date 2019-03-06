@@ -11,8 +11,8 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import ajb.area.AreaUtils;
-import ajb.area.GeometryUtils;
 import ajb.colours.ColourUtils;
+import ajb.geometry.GeometryUtils;
 import ajb.ships.ShipUtils;
 
 public class Vessel implements Serializable {
