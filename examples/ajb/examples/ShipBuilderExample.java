@@ -29,7 +29,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 
-import ajb.area.AreaUtils;
 import ajb.examples.helpers.LookAndFeelUtils;
 import ajb.examples.helpers.Starfield;
 import ajb.examples.helpers.Vessel;
