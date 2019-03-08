@@ -52,8 +52,8 @@ public class Vessel implements Serializable {
 
 			g2d.rotate(Math.toRadians(rotationInDegrees), center.getX(), center.getY());
 
-			//g2d.setColor(ColourUtils.makeTransparent(ColourUtils.background, 200));
-			//g2d.fill(bounds);
+			// g2d.setColor(ColourUtils.makeTransparent(ColourUtils.background, 200));
+			// g2d.fill(bounds);
 
 			g2d.setColor(color);
 			g2d.fill(displayArea);
@@ -81,7 +81,12 @@ public class Vessel implements Serializable {
 					new Point2D.Double(center.getX() - (displayArea.getBounds2D().getWidth() / 2),
 							center.getY() - (displayArea.getBounds2D().getHeight() / 2)));
 
-			//bounds = AreaUtils.getOutline(displayArea);
+			halfArea = AreaUtils.translateToTopLeft(halfArea);
+
+			halfArea = AreaUtils.translateToPoint(halfArea,
+					new Point2D.Double(center.getX(), center.getY() - (halfArea.getBounds2D().getHeight() / 2)));
+
+			// bounds = AreaUtils.getOutline(displayArea);
 
 		} catch (Exception ex) {
 
@@ -106,11 +111,20 @@ public class Vessel implements Serializable {
 
 	}
 
-	public void add() {
+	public void add(Point2D.Double mousePos) {
 
 		try {
 
-			GeometryUtils.addRandomBlock(this.halfArea);
+			if (this.halfArea.getBounds2D().contains(mousePos)) {
+
+				GeometryUtils.addBlockAtPoint(this.halfArea, mousePos);
+
+			} else {
+
+				GeometryUtils.addRandomBlock(this.halfArea);
+
+			}
+
 			generateDisplayArea();
 
 		} catch (Exception ex) {
@@ -121,11 +135,20 @@ public class Vessel implements Serializable {
 
 	}
 
-	public void subtract() {
+	public void subtract(Point2D.Double mousePos) {
 
 		try {
 
-			GeometryUtils.subtractRandomBlock(this.halfArea);
+			if (this.halfArea.getBounds2D().contains(mousePos)) {
+
+				GeometryUtils.subtractBlockAtPoint(this.halfArea, mousePos);
+
+			} else {
+
+				GeometryUtils.subtractRandomBlock(this.halfArea);
+
+			}
+
 			generateDisplayArea();
 
 		} catch (Exception ex) {
@@ -183,7 +206,7 @@ public class Vessel implements Serializable {
 		Area copy = new Area(halfArea);
 		copy = AreaUtils.translateToTopLeft(copy);
 
-		ImageUtils.save(ImageUtils.drawArea(copy), "png", this.getIdentifier());		
+		ImageUtils.save(ImageUtils.drawArea(copy), "png", this.getIdentifier());
 
 	}
 

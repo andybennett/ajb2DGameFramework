@@ -1,10 +1,13 @@
 package ajb.examples;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
@@ -26,6 +29,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 
+import ajb.area.AreaUtils;
 import ajb.examples.helpers.LookAndFeelUtils;
 import ajb.examples.helpers.Starfield;
 import ajb.examples.helpers.Vessel;
@@ -75,6 +79,8 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 		frame.addKeyListener(this);
 		frame.addComponentListener(this);
 
+		this.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+		
 		frame.setVisible(true);
 
 		loop.go();
@@ -105,9 +111,9 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 		super.drawBeforeTransform(g);
 
 		if (starfield != null) {
-			
+
 			starfield.draw(g);
-			
+
 		}
 
 	}
@@ -195,7 +201,10 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 				if (vessel != null) {
 
-					vessel.add();
+					Point mousePos = MouseInfo.getPointerInfo().getLocation();
+					SwingUtilities.convertPointFromScreen(mousePos, this);
+					
+					vessel.add(transformPoint(new Point2D.Double(mousePos.getX(), mousePos.getY())));
 
 				}
 
@@ -205,7 +214,10 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 				if (vessel != null) {
 
-					vessel.subtract();
+					Point mousePos = MouseInfo.getPointerInfo().getLocation();
+					SwingUtilities.convertPointFromScreen(mousePos, this);
+					
+					vessel.subtract(transformPoint(new Point2D.Double(mousePos.getX(), mousePos.getY())));
 
 				}
 
@@ -455,12 +467,55 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 				myPopupMenu.add(cloneVessel);
 
+				List<Area> intersectingAreas = intersectingVessels(selectedVessel);
+				
+				if (intersectingAreas.size() > 1) {
+					
+					JMenuItem mergeVessel = new JMenuItem(new AbstractAction("Merge") {
+						public void actionPerformed(ActionEvent ae) {
+	
+							Area newArea = new Area();
+							
+							for (Area area : intersectingAreas) {
+								
+								newArea.add(area);
+								
+							}
+							
+							Vessel newVessel = new Vessel(newArea, selectedVessel.center);
+							vessels.add(newVessel);
+	
+						}
+					});
+	
+					myPopupMenu.add(mergeVessel);		
+				}
+
 			}
 
 			myPopupMenu.show(this, e.getX(), e.getY());
 
 		}
 
+	}
+	
+	private List<Area> intersectingVessels(Vessel selectedVessel) {
+		
+		List<Area> result = new ArrayList<Area>();
+		result.add(selectedVessel.halfArea);
+		
+		for (Vessel vessel : vessels) {
+			
+			if (!vessel.identifier.equals(selectedVessel.identifier) && vessel.halfArea.intersects(selectedVessel.halfArea.getBounds2D())) {
+				
+				result.add(vessel.halfArea);
+				
+			}
+			
+		}
+		
+		return result;
+		
 	}
 
 	private void moveToShip() {
@@ -488,7 +543,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 	@Override
 	public void componentResized(ComponentEvent arg0) {
 
-		starfield = new Starfield(0, 0, this.getWidth(), this.getHeight(), 100, 200);
+		// starfield = new Starfield(0, 0, this.getWidth(), this.getHeight(), 100, 200);
 		moveToShip();
 
 	}
