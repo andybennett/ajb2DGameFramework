@@ -54,7 +54,7 @@ public class Starfield {
 
 				if (RandomInt.anyRandomIntRange(0, 1) == 1) {
 
-					star.alpha += 10;
+					star.alpha += 25;
 
 					if (star.alpha > 255) {
 
@@ -64,7 +64,7 @@ public class Starfield {
 
 				} else {
 
-					star.alpha -= 10;
+					star.alpha -= 25;
 
 					if (star.alpha < 50) {
 

@@ -119,7 +119,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 
 	@Override
 	public void paint(Graphics g) {
-
+		
 		super.paint(g);
 
 		Graphics2D gr = (Graphics2D) g;
@@ -175,24 +175,6 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 					frame.setVisible(true);
 
 				}
-
-			} else if (e.getKeyCode() == KeyEvent.VK_1) {
-
-				coordTransform.setToScale(1, 1);
-
-				moveToShip();
-
-			} else if (e.getKeyCode() == KeyEvent.VK_2) {
-
-				coordTransform.setToScale(0.5, 0.5);
-
-				moveToShip();
-
-			} else if (e.getKeyCode() == KeyEvent.VK_3) {
-
-				coordTransform.setToScale(0.2, 0.2);
-
-				moveToShip();
 
 			} else if (e.getKeyCode() == KeyEvent.VK_A) {
 
@@ -542,7 +524,7 @@ public class ShipBuilderExample extends Base2DFramework implements Loop {
 	@Override
 	public void componentResized(ComponentEvent arg0) {
 
-		// starfield = new Starfield(0, 0, this.getWidth(), this.getHeight(), 100, 200);
+		starfield = new Starfield(0, 0, this.getWidth(), this.getHeight(), 100, 200);
 		moveToShip();
 
 	}
